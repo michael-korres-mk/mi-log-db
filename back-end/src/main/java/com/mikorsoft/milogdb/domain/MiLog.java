@@ -1,4 +1,4 @@
-package com.mikorsoft.domain;
+package com.mikorsoft.milogdb.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
