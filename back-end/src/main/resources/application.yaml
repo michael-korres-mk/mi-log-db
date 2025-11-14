@@ -1,0 +1,20 @@
+spring:
+    application.name: mi-log-db
+    datasource:
+        url: jdbc:postgresql://localhost:5432/postgres
+        username: admin
+        password: P@ssw0rd
+        driver-class-name: org.postgresql.Driver
+    jpa:
+        show-sql: true
+        properties.hibernate:
+            use_sql_comments: true
+            format_sql: false
+            default_schema: mi_log_db
+            dialect: org.hibernate.dialect.PostgreSQLDialect
+
+        # Naming strategy
+        hibernate:
+            naming.implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyHbmImpl
+            naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+#            ddl-auto: create
