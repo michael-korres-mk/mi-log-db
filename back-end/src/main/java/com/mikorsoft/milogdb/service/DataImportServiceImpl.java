@@ -21,10 +21,12 @@ public class DataImportServiceImpl implements DataImportService {
 	private final String REMOTE_NAME_REGEX = "([A-Za-z0-9_.]+|-)";
 	private final String USER_ID_REGEX = "([A-Za-z0-9_]+|-)";
 	private final String TIMESTAMP_REGEX = "\\[(\\d{2}/[A-Za-z]{3}/\\d{4}:\\d{2}:\\d{2}:\\d{2} -\\d{4})]";
+
+	private final String HTTP_METHOD_REGEX = "\"([A-Z]{3,}) / HTTP/\\d.\\d\"";
 	private final String ANY_CHARACTER = ".*";
 
 	private final String accessLogRegex = "^" + IP_REGEX + " " + REMOTE_NAME_REGEX + " " + USER_ID_REGEX + " " + TIMESTAMP_REGEX +
-
+			" " + HTTP_METHOD_REGEX +
 
 //				"\"([^\"]*)\"" + " (\\d{3}) " + "(\\d+|-) " +
 //				"\"([^\"]*)\" \"([^\"]*)\"$" +
@@ -68,6 +70,8 @@ public class DataImportServiceImpl implements DataImportService {
 			ZonedDateTime zdt = ZonedDateTime.parse(timestamp, formatter);
 			System.out.println("timestamp = " + zdt);
 
+			String httpMethod = m.group(5);
+			System.out.println("httpMethod = " + httpMethod);
 
 
 //					String threadId = m.group(3);
