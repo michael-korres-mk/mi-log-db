@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,15 +34,16 @@ public class DataImportServiceImpl implements DataImportService {
 
 	private final String accessLogRegex =
 			START_ANCHOR +
-				IP_REGEX + " " +
-				REMOTE_NAME_REGEX + " " +
-				USER_ID_REGEX + " " +
-				TIMESTAMP_REGEX + " " +
-				HTTP_METHOD_REGEX + " " +
-				HTTP_RESPONSE_STATUS_REGEX + " " +
-				RESPONSE_SIZE_REGEX + " " +
-				REFERRER_REGEX + " " +
-				USER_AGENT_REGEX +
+			String.join(" ", List.of(
+					IP_REGEX,
+					REMOTE_NAME_REGEX,
+					USER_ID_REGEX,
+					TIMESTAMP_REGEX,
+					HTTP_METHOD_REGEX,
+					HTTP_RESPONSE_STATUS_REGEX,
+					RESPONSE_SIZE_REGEX,
+					REFERRER_REGEX,
+					USER_AGENT_REGEX )) +
 			END_ANCHOR
 			;
 
