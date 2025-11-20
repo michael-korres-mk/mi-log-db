@@ -16,20 +16,23 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class DataImportServiceImpl implements DataImportService {
 
-//	  "-" "Mozilla/4.0 (compatible; MSIE 5.5; Windows 98)"
+// "Mozilla/4.0 (compatible; MSIE 5.5; Windows 98)"
 
 	private final String IP_REGEX = "(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})";
-	private final String REMOTE_NAME_REGEX = "([A-Za-z0-9_.]+|-)";
-	private final String USER_ID_REGEX = "([A-Za-z0-9_]+|-)";
+	private final String NAME_REGEX = "([A-Za-z0-9_.]+|-)";
+	private final String REMOTE_NAME_REGEX = NAME_REGEX;
+	private final String USER_ID_REGEX = NAME_REGEX;
 	private final String TIMESTAMP_REGEX = "\\[(\\d{2}/[A-Za-z]{3}/\\d{4}:\\d{2}:\\d{2}:\\d{2} -\\d{4})]";
 	private final String HTTP_METHOD_REGEX = "\"([A-Z]{3,}) / HTTP/\\d.\\d\"";
 	private final String HTTP_RESPONSE_STATUS_REGEX = "(\\d{3})";
 	private final String RESPONSE_SIZE_REGEX = "(\\d+)";
+	private final String REFERRER_REGEX = "\"" + NAME_REGEX + "\"";
+	private final String USER_AGENT_REGEX = "\"([^\"]*)\""; // get anything between A PAIR OF quotes (!= .*)
 
 	private final String ANY_CHARACTER = ".*";
 
 	private final String accessLogRegex = "^" + IP_REGEX + " " + REMOTE_NAME_REGEX + " " + USER_ID_REGEX + " " + TIMESTAMP_REGEX +
-			" " + HTTP_METHOD_REGEX + " " + HTTP_RESPONSE_STATUS_REGEX + " " + RESPONSE_SIZE_REGEX +
+			" " + HTTP_METHOD_REGEX + " " + HTTP_RESPONSE_STATUS_REGEX + " " + RESPONSE_SIZE_REGEX + " " + REFERRER_REGEX + " " + USER_AGENT_REGEX +
 
 //				"\"([^\"]*)\"" + " (\\d{3}) " + "(\\d+|-) " +
 //				"\"([^\"]*)\" \"([^\"]*)\"$" +
@@ -81,6 +84,13 @@ public class DataImportServiceImpl implements DataImportService {
 
 			long responseSize = Long.parseLong(m.group(7));
 			System.out.println("responseSize = " + responseSize);
+
+			String referrer = m.group(8);
+			System.out.println("referrer = " + referrer);
+
+			String userAgent = m.group(9);
+			System.out.println("userAgent = " + userAgent);
+
 
 
 //					String threadId = m.group(3);
