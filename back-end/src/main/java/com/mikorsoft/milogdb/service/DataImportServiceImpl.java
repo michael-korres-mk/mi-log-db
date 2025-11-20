@@ -16,8 +16,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class DataImportServiceImpl implements DataImportService {
 
-// "Mozilla/4.0 (compatible; MSIE 5.5; Windows 98)"
-
+	private final String START_ANCHOR = "$";
 	private final String IP_REGEX = "(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})";
 	private final String NAME_REGEX = "([A-Za-z0-9_.]+|-)";
 	private final String REMOTE_NAME_REGEX = NAME_REGEX;
@@ -30,13 +29,20 @@ public class DataImportServiceImpl implements DataImportService {
 	private final String USER_AGENT_REGEX = "\"([^\"]*)\""; // get anything between A PAIR OF quotes (!= .*)
 
 	private final String ANY_CHARACTER = ".*";
+	private final String END_ANCHOR = "$";
 
-	private final String accessLogRegex = "^" + IP_REGEX + " " + REMOTE_NAME_REGEX + " " + USER_ID_REGEX + " " + TIMESTAMP_REGEX +
-			" " + HTTP_METHOD_REGEX + " " + HTTP_RESPONSE_STATUS_REGEX + " " + RESPONSE_SIZE_REGEX + " " + REFERRER_REGEX + " " + USER_AGENT_REGEX +
-
-//				"\"([^\"]*)\"" + " (\\d{3}) " + "(\\d+|-) " +
-//				"\"([^\"]*)\" \"([^\"]*)\"$" +
-			ANY_CHARACTER
+	private final String accessLogRegex =
+			START_ANCHOR +
+				IP_REGEX + " " +
+				REMOTE_NAME_REGEX + " " +
+				USER_ID_REGEX + " " +
+				TIMESTAMP_REGEX + " " +
+				HTTP_METHOD_REGEX + " " +
+				HTTP_RESPONSE_STATUS_REGEX + " " +
+				RESPONSE_SIZE_REGEX + " " +
+				REFERRER_REGEX + " " +
+				USER_AGENT_REGEX +
+			END_ANCHOR
 			;
 
 	public void importFile(String filename,String regex) throws IOException {
