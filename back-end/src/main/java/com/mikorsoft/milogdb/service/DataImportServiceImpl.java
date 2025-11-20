@@ -15,14 +15,15 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class DataImportServiceImpl implements DataImportService {
 
-//	143.127.131.4 - - [09/Jun/2005:23:48:54 -0400] "GET / HTTP/1.1" 403 3931 "-" "Mozilla/4.0 (compatible; MSIE 5.5; Windows 98)"
+//	 "GET / HTTP/1.1" 403 3931 "-" "Mozilla/4.0 (compatible; MSIE 5.5; Windows 98)"
 
 	private final String IP_REGEX = "(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})";
+	private final String REMOTE_NAME_REGEX = "([A-Za-z0-9_.]+|-)";
+	private final String USER_ID_REGEX = "([A-Za-z0-9_]+|-)";
 	private final String TIMESTAMP_REGEX = "\\[(\\d{2}/[A-Za-z]{3}/\\d{4}:\\d{2}:\\d{2}:\\d{2} -\\d{4})]";
-
 	private final String ANY_CHARACTER = ".*";
 
-	private final String accessLogRegex = "^" + IP_REGEX + " - - " + TIMESTAMP_REGEX +
+	private final String accessLogRegex = "^" + IP_REGEX + " " + REMOTE_NAME_REGEX + " " + USER_ID_REGEX + " " + TIMESTAMP_REGEX +
 
 
 //				"\"([^\"]*)\"" + " (\\d{3}) " + "(\\d+|-) " +
@@ -56,7 +57,13 @@ public class DataImportServiceImpl implements DataImportService {
 			String IP = m.group(1);
 			System.out.println("IP = " + IP);
 
-			String timestamp = m.group(2);
+			String remoteName = m.group(2);
+			System.out.println("remoteName = " + remoteName);
+
+			String userID = m.group(3);
+			System.out.println("userID = " + userID);
+
+			String timestamp = m.group(4);
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss Z", Locale.ENGLISH);
 			ZonedDateTime zdt = ZonedDateTime.parse(timestamp, formatter);
 			System.out.println("timestamp = " + zdt);
