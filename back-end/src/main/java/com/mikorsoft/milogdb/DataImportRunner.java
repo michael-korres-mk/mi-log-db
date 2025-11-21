@@ -16,8 +16,7 @@ public class DataImportRunner implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 //		dataImportService.importFile("access_log_full", DataImportServiceImpl.ACCESS_LOG_REGEX);
-//		dataImportService.importFile("HDFS_DataXceiver.log", DataImportServiceImpl.HDFS_DATAXCEIVER_LOG_REGEX);
-
-		dataImportService.importFile("HDFS_FS_Namesystem.log", DataImportServiceImpl.HDFS_FS_NAMESYSTEM_LOG_REGEX);
+		dataImportService.importFile("HDFS_DataXceiver.log", DataImportServiceImpl.HDFS_DATA_XCEIVER_LOG_REGEX);
+//		dataImportService.importFile("HDFS_FS_Namesystem.log", DataImportServiceImpl.HDFS_FS_NAMESYSTEM_LOG_REGEX);
 	}
 }

@@ -51,14 +51,6 @@ public class DataImportServiceImpl implements DataImportService {
 			END_ANCHOR
 			;
 
-	public static final String HDFS_DATAXCEIVER_LOG_REGEX =
-			START_ANCHOR +
-			String.join(" ", List.of(
-
-			)) +
-			END_ANCHOR
-			;
-
 
 //• Time stamp,
 //• Block ID(s),
@@ -70,7 +62,7 @@ public class DataImportServiceImpl implements DataImportService {
 //	081109 203550 32 INFO dfs.FSNamesystem: BLOCK* NameSystem.allocateBlock: /user/root/rand/_temporary/_task_200811092030_0001_m_000240_0/part-00240. blk_-1812791921266891724
 //  081109 203521 19 INFO dfs.FSNamesystem: BLOCK* ask 10.250.14.224:50010 to replicate blk_-1608999687919862906 to datanode(s) 10.251.215.16:50010 10.251.71.193:50010
 //	                                        BLOCK* ask 10.250.1.1:50010 to replicate blk_-123 to datanode(s)10.0.0.1 10.0.0.2
-	private static final String HDFS_TIMESTAMP_REGEX = "(\\d{6} \\d{6} \\d{2})";
+	private static final String HDFS_TIMESTAMP_REGEX = "(\\d{6} \\d{6}) \\d{2,3}";
 	private static final String BLOCK_ID_REGEX = "blk_" + INTEGER_NUM_REGEX;
 	private static final String SOURCE_IP_REGEX = IP_REGEX;
 	private static final String DESTINATION_IPS_REGEX = IPS_REGEX;
@@ -90,16 +82,36 @@ public class DataImportServiceImpl implements DataImportService {
 					"BLOCK\\*",
 					"(?:" + HDFS_FS_NAMESYSTEM_REPLICATE_LOG_REGEX + "|" + HDFS_FS_NAMESYSTEM_UPDATE_LOG_REGEX + ")"
 			)) +
-			ANY_CHARACTER
+			END_ANCHOR
 			;
+
+
+//	081109 203518 143 INFO dfs.DataNode$DataXceiver: Receiving block blk_-1608999687919862906 src: /10.250.19.102:54106 dest: /10.250.19.102:50010
+//  081109 203521 143 INFO dfs.DataNode$DataXceiver: Received block blk_-1608999687919862906 src: /10.251.215.16:52002 dest: /10.251.215.16:50010 of size 91178
+//  081109 203523 148 INFO dfs.DataNode$DataXceiver: 10.250.11.100:50010 Served block blk_-3544583377289625738 to /10.250.19.102
+
+
+//	private static final String HDFS_DATA_XCEIVER_REPLICATE_LOG_REGEX = "ask " + SOURCE_IP_REGEX + " to " + HDFS_DATA_XCEIVER_TYPE_REGEX + " " + BLOCK_ID_REGEX + " to datanode\\(s\\) " + DESTINATION_IPS_REGEX;
+//	private static final String HDFS_DATA_XCEIVER_UPDATE_LOG_REGEX = "NameSystem\\.addStoredBlock: blockMap " + HDFS_DATA_XCEIVER_TYPE_REGEX + ": " + SOURCE_IP_REGEX + " is added to "  + BLOCK_ID_REGEX + " size " + SIZE_REGEX;
+
+	public static final String HDFS_DATA_XCEIVER_LOG_REGEX =
+			START_ANCHOR +
+					String.join(" ", List.of(
+							HDFS_TIMESTAMP_REGEX,
+							"[A-Z]+",
+							"dfs\\.DataNode\\$DataXceiver:",
+							"(Receiving|Received|" + IP_REGEX_RAW + ")"
+
+					)) +
+					ANY_CHARACTER
+			;
+
 
 
 
 	public void importFile(String filename,String regex) throws IOException {
 
 		System.out.println("IMPORT FILE !");
-
-
 
 		File file = new ClassPathResource(filename).getFile();
 		Pattern p = Pattern.compile(regex);
@@ -112,7 +124,7 @@ public class DataImportServiceImpl implements DataImportService {
 			while ((n-- > 0) && !(line = is.readLine()).isEmpty()) {
 				Matcher m = p.matcher(line);
 
-				this.createHdfsFSNamesystemLogRecord(m);
+				this.createHdfsDataXceiverLogRecord(m);
 
 			}
 		}
@@ -156,13 +168,78 @@ public class DataImportServiceImpl implements DataImportService {
 		}
 	}
 
+// • Time stamp,
+// • Block ID,
+// • Source IP,
+// • Destination IP,
+// • (Optional) Size,
+// • Type (receiving, received, served — ignore other records).
+	private void createHdfsDataXceiverLogRecord(Matcher m){
+
+		if (m.matches()) {
+
+			String timestamp = m.group(1);
+
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd HHmmss");
+			ZonedDateTime zdt = LocalDateTime.parse(timestamp, formatter).atZone(ZoneId.of("UTC"));
+			System.out.println("timestamp = " + zdt);
+
+			String logType = m.group(2);
+
+			if(logType == null){
+				throw new RuntimeException("Invalid HDFS FS Namesystem Log !!!");
+			} else if (logType.equals("Receiving")) {
+				System.out.println(logType);
+			}
+			else if (logType.equals("Received")) {
+				System.out.println(logType);
+			}
+			else if(logType.matches(IP_REGEX_RAW)){
+				System.out.println("IP: " + logType);
+			}
+
+
+//			if(replicate != null){
+//				System.out.println(replicate);
+//				String sourceIP = m.group(2);
+//				System.out.println("sourceIP = " + sourceIP);
+//				// TODO: Check if there are records with multiple blockIDs
+//				long blockID = Long.parseLong(m.group(4));
+//				System.out.println("blockID = " + blockID);
+//				System.out.println("Destination IPs = [");
+//				List<String> IPs = List.of(m.group(5).split(" "));
+//				IPs.forEach(System.out::println);
+//				System.out.println("]");
+//
+//			} else if (updated != null) {
+//				System.out.println(updated);
+//				String sourceIP = m.group(7);
+//				System.out.println("sourceIP = " + sourceIP);
+//				long blockID = Long.parseLong(m.group(8));
+//				System.out.println("blockID = " + blockID);
+//				long size = Long.parseLong(m.group(9));
+//				System.out.println("size = " + size);
+//			}
+			else {
+				throw new RuntimeException("Invalid HDFS FS Namesystem Log !!!");
+			}
+//
+//			new AccessLogRecord(date,time,threadId,level,component,blockId,src,dest);
+
+			System.out.println("----------------");
+
+		}
+
+	}
+
+
 	private void createHdfsFSNamesystemLogRecord(Matcher m){
 		
 		if (m.matches()) {
 
 			String timestamp = m.group(1);
 
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd HHmmss SS");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd HHmmss");
 			ZonedDateTime zdt = LocalDateTime.parse(timestamp, formatter).atZone(ZoneId.of("UTC"));
 			System.out.println("timestamp = " + zdt);
 
@@ -191,7 +268,7 @@ public class DataImportServiceImpl implements DataImportService {
 				System.out.println("size = " + size);
 			}
 			else {
-				throw new RuntimeException("Invalid HDFS FS Namesystem LOg !!!");
+				throw new RuntimeException("Invalid HDFS FS Namesystem Log !!!");
 			}
 
 //					new AccessLogRecord(date,time,threadId,level,component,blockId,src,dest);
