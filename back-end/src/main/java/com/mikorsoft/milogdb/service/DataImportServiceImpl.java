@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -155,36 +157,42 @@ public class DataImportServiceImpl implements DataImportService {
 	}
 
 	private void createHdfsFSNamesystemLogRecord(Matcher m){
-
-		System.out.println(HDFS_FS_NAMESYSTEM_LOG_REGEX);
-
+		
 		if (m.matches()) {
 
-			System.out.println(m.groupCount());
+			String timestamp = m.group(1);
 
-			for(int i = 1; i < m.groupCount();i++){
-				System.out.println(i + ". " + m.group(i));
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd HHmmss SS");
+			ZonedDateTime zdt = LocalDateTime.parse(timestamp, formatter).atZone(ZoneId.of("UTC"));
+			System.out.println("timestamp = " + zdt);
+
+			String replicate = m.group(3);
+			String updated = m.group(6);
+
+			if(replicate != null){
+					System.out.println(replicate);
+				String sourceIP = m.group(2);
+					System.out.println("sourceIP = " + sourceIP);
+				// TODO: Check if there are records with multiple blockIDs
+				long blockID = Long.parseLong(m.group(4));
+					System.out.println("blockID = " + blockID);
+					System.out.println("Destination IPs = [");
+				List<String> IPs = List.of(m.group(5).split(" "));
+				IPs.forEach(System.out::println);
+					System.out.println("]");
+
+			} else if (updated != null) {
+				System.out.println(updated);
+				String sourceIP = m.group(7);
+				System.out.println("sourceIP = " + sourceIP);
+				long blockID = Long.parseLong(m.group(8));
+				System.out.println("blockID = " + blockID);
+				long size = Long.parseLong(m.group(9));
+				System.out.println("size = " + size);
 			}
-
-//			String timestamp = m.group(1);
-//
-//			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd HHmmss SS");
-//			ZonedDateTime zdt = LocalDateTime.parse(timestamp, formatter).atZone(ZoneId.of("UTC"));
-//			System.out.println("timestamp = " + zdt);
-//
-//			String sourceIP = m.group(2);
-//			System.out.println("sourceIP = " + sourceIP);
-//
-//			// TODO: Check if there are records with multiple blockIDs
-//			long blockID = Long.parseLong(m.group(3));
-//			System.out.println("blockID = " + blockID);
-//
-//			System.out.println("Destination IPs = [");
-//			List<String> IPs = List.of(m.group(4).split(" "));
-//			IPs.forEach(System.out::println);
-//			System.out.println("]");
-
-
+			else {
+				throw new RuntimeException("Invalid HDFS FS Namesystem LOg !!!");
+			}
 
 //					new AccessLogRecord(date,time,threadId,level,component,blockId,src,dest);
 
