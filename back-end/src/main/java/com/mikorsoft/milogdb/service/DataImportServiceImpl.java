@@ -91,16 +91,17 @@ public class DataImportServiceImpl implements DataImportService {
 //  081109 203523 148 INFO dfs.DataNode$DataXceiver: 10.250.11.100:50010 Served block blk_-3544583377289625738 to /10.250.19.102
 
 
-//	private static final String HDFS_DATA_XCEIVER_REPLICATE_LOG_REGEX = "ask " + SOURCE_IP_REGEX + " to " + HDFS_DATA_XCEIVER_TYPE_REGEX + " " + BLOCK_ID_REGEX + " to datanode\\(s\\) " + DESTINATION_IPS_REGEX;
-//	private static final String HDFS_DATA_XCEIVER_UPDATE_LOG_REGEX = "NameSystem\\.addStoredBlock: blockMap " + HDFS_DATA_XCEIVER_TYPE_REGEX + ": " + SOURCE_IP_REGEX + " is added to "  + BLOCK_ID_REGEX + " size " + SIZE_REGEX;
-
 	public static final String HDFS_DATA_XCEIVER_LOG_REGEX =
 			START_ANCHOR +
 					String.join(" ", List.of(
 							HDFS_TIMESTAMP_REGEX,
 							"[A-Z]+",
 							"dfs\\.DataNode\\$DataXceiver:",
-							"(Receiving|Received|" + IP_REGEX_RAW + ")"
+							"(Receiving|Received|" + IP_REGEX_RAW + ") (?:Served )?block",
+							BLOCK_ID_REGEX,
+							"(?:src:|to) /" + IP_REGEX,
+							"(?:dest: /" + IP_REGEX + ")?"
+							,"(?:of size " + SIZE_REGEX + ")?"
 
 					)) +
 					ANY_CHARACTER
@@ -185,46 +186,39 @@ public class DataImportServiceImpl implements DataImportService {
 			System.out.println("timestamp = " + zdt);
 
 			String logType = m.group(2);
+			System.out.println("logType = " + logType);
+
+			long blockID = Long.parseLong(m.group(3));
+			System.out.println("blockID = " + blockID);
+
+			String srcOrDestIP = m.group(4);
+
+			String destIP = m.group(5);
+			Long size = (m.group(6) == null)? null : Long.parseLong(m.group(6));
 
 			if(logType == null){
 				throw new RuntimeException("Invalid HDFS FS Namesystem Log !!!");
 			} else if (logType.equals("Receiving")) {
 				System.out.println(logType);
+				System.out.println("source IP: " + srcOrDestIP);
+				System.out.println("dest IP: " + destIP);
 			}
 			else if (logType.equals("Received")) {
 				System.out.println(logType);
+				System.out.println("source IP: " + srcOrDestIP);
+				System.out.println("dest IP: " + destIP);
+				System.out.println("size = " + size);
 			}
 			else if(logType.matches(IP_REGEX_RAW)){
 				System.out.println("IP: " + logType);
+				System.out.println("destination IP: " + srcOrDestIP);
+
 			}
 
 
-//			if(replicate != null){
-//				System.out.println(replicate);
-//				String sourceIP = m.group(2);
-//				System.out.println("sourceIP = " + sourceIP);
-//				// TODO: Check if there are records with multiple blockIDs
-//				long blockID = Long.parseLong(m.group(4));
-//				System.out.println("blockID = " + blockID);
-//				System.out.println("Destination IPs = [");
-//				List<String> IPs = List.of(m.group(5).split(" "));
-//				IPs.forEach(System.out::println);
-//				System.out.println("]");
-//
-//			} else if (updated != null) {
-//				System.out.println(updated);
-//				String sourceIP = m.group(7);
-//				System.out.println("sourceIP = " + sourceIP);
-//				long blockID = Long.parseLong(m.group(8));
-//				System.out.println("blockID = " + blockID);
-//				long size = Long.parseLong(m.group(9));
-//				System.out.println("size = " + size);
-//			}
-			else {
-				throw new RuntimeException("Invalid HDFS FS Namesystem Log !!!");
-			}
-//
-//			new AccessLogRecord(date,time,threadId,level,component,blockId,src,dest);
+
+			System.out.println("blockID = " + blockID);
+
 
 			System.out.println("----------------");
 
