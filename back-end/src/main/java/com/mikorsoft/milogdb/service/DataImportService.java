@@ -1,7 +1,9 @@
 package com.mikorsoft.milogdb.service;
 
+import com.mikorsoft.milogdb.domain.LogFile;
+
 import java.io.IOException;
 
 public interface DataImportService {
-	void importFile(String filename,String regex) throws IOException;
+	void importFile(LogFile log, String regex) throws IOException;
 }
