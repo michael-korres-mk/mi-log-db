@@ -46,15 +46,16 @@ public class DataImportServiceImpl implements DataImportService {
 			// TODO: Remove limit
 			int n = 50;
 			List<MiLog> logs = new ArrayList<>();
-			while ((n-- > 0) && !(line = is.readLine()).isEmpty()) {
+			while ((n > 0) && (line = is.readLine()) != null) {
 				Matcher m = p.matcher(line);
 				if (m.matches()) {
 					MiLog miLog = method.apply(m);
 					System.out.println(miLog);
 					logs.add(miLog);
+					n--;
 				}
 			}
-//			miLogRepository.saveAll(logs);
+			miLogRepository.saveAll(logs);
 		}
 
 	}

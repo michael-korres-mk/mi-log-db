@@ -16,6 +16,7 @@ public class MiLog {
 
 	// common
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String IP;
 	private ZonedDateTime timestamp;
@@ -23,6 +24,7 @@ public class MiLog {
 	@Enumerated(value = EnumType.STRING)
 	private LogType logType;
 
+	// TODO: bring "details" to different relation
 	// access
 	private String remoteName;
 	private String userID;
