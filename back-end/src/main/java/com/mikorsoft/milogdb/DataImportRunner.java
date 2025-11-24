@@ -1,7 +1,8 @@
 package com.mikorsoft.milogdb;
 
+import com.mikorsoft.milogdb.domain.LogFile;
+import com.mikorsoft.milogdb.domain.Regexes;
 import com.mikorsoft.milogdb.service.DataImportService;
-import com.mikorsoft.milogdb.service.DataImportServiceImpl;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -15,8 +16,8 @@ public class DataImportRunner implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-//		dataImportService.importFile("access_log_full", DataImportServiceImpl.ACCESS_LOG_REGEX);
-		dataImportService.importFile("HDFS_DataXceiver.log", DataImportServiceImpl.HDFS_DATA_XCEIVER_LOG_REGEX);
-//		dataImportService.importFile("HDFS_FS_Namesystem.log", DataImportServiceImpl.HDFS_FS_NAMESYSTEM_LOG_REGEX);
+		dataImportService.importFile(LogFile.ACCESS, Regexes.ACCESS_LOG_REGEX);
+		dataImportService.importFile(LogFile.HDFS_DATA_XCEIVER, Regexes.HDFS_DATA_XCEIVER_LOG_REGEX);
+		dataImportService.importFile(LogFile.HDFS_FS_NAMESYSTEM, Regexes.HDFS_FS_NAMESYSTEM_LOG_REGEX);
 	}
 }
