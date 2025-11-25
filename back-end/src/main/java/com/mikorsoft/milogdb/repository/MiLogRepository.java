@@ -54,15 +54,11 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 	List<Query4DTO> query4(ZonedDateTime from, ZonedDateTime to);
 
 	@Query(nativeQuery = true, value = """
-		SELECT l.referrer
+		SELECT l.referrer,COUNT(DISTINCT l.resourcerequested) AS count
 		FROM mi_log_db.mi_logs l
 		WHERE l.referrer IS NOT NULL AND l.referrer <> '-' AND l.resourcerequested IS NOT NULL
-		AND EXISTS(
-			SELECT 1
-			FROM mi_log_db.mi_logs l2
-			WHERE l2.referrer IS NOT NULL AND l2.referrer <> '-' AND l2.resourcerequested IS NOT NULL
-			AND l.referrer = l2.referrer AND l.resourcerequested <> l2.resourcerequested
-		)
+		GROUP BY l.referrer
+		HAVING COUNT(DISTINCT l.resourcerequested) > 1;
 		"""
 	)
 	List<Query5DTO> query5();
