@@ -5,7 +5,7 @@ import com.mikorsoft.milogdb.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MiLogRepository extends JpaRepository<MiLog, Long> {
@@ -18,7 +18,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
         ORDER BY count DESC
     """
 	)
-	List<Query1DTO> query1(ZonedDateTime from, ZonedDateTime to);
+	List<Query1DTO> query1(LocalDateTime from, LocalDateTime to);
 
 	@Query(nativeQuery = true, value = """
         SELECT TO_CHAR(l.timestamp, 'DD') AS day,COUNT(*) AS count
@@ -27,7 +27,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
         GROUP BY TO_CHAR(l.timestamp, 'DD')
     """
 	)
-	List<Query2DTO> query2(String logType, ZonedDateTime from, ZonedDateTime to);
+	List<Query2DTO> query2(String logType, LocalDateTime from, LocalDateTime to);
 
 	@Query(nativeQuery = true, value = """
         SELECT l.ip,COUNT(*) AS count
@@ -51,7 +51,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
         LIMIT 5
     """
 	)
-	List<Query4DTO> query4(ZonedDateTime from, ZonedDateTime to);
+	List<Query4DTO> query4(LocalDateTime from, LocalDateTime to);
 
 	@Query(nativeQuery = true, value = """
 		SELECT l.referrer,COUNT(DISTINCT l.resourcerequested) AS count
@@ -116,7 +116,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
         WHERE l.timestamp >= :from AND l.timestamp <= :to AND l.httpmethod = :httpMethod
         GROUP BY l.IP
     """)
-	List<Query111213DTO> query11(ZonedDateTime from, ZonedDateTime to,String httpMethod);
+	List<Query111213DTO> query11(LocalDateTime from, LocalDateTime to,String httpMethod);
 
 	@Query(nativeQuery = true, value = """
         SELECT l.IP, COUNT(l.httpmethod) AS count
@@ -125,7 +125,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
         GROUP BY l.IP
         HAVING COUNT(DISTINCT l.httpmethod) = 2;
     """)
-	List<Query111213DTO> query12(ZonedDateTime from, ZonedDateTime to,List<String> httpMethods);
+	List<Query111213DTO> query12(LocalDateTime from, LocalDateTime to,List<String> httpMethods);
 
 	@Query(nativeQuery = true, value = """
         SELECT l.IP, COUNT(l.httpmethod) AS count
@@ -134,7 +134,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
         GROUP BY l.IP
         HAVING COUNT(DISTINCT l.httpmethod) = 4;
     """)
-	List<Query111213DTO> query13(ZonedDateTime from, ZonedDateTime to);
+	List<Query111213DTO> query13(LocalDateTime from, LocalDateTime to);
 
 
 //	@Query(nativeQuery = true, value = """
