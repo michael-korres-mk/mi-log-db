@@ -3,7 +3,7 @@ package com.mikorsoft.milogdb.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -19,7 +19,7 @@ public class MiLog {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String IP;
-	private ZonedDateTime timestamp;
+	private LocalDateTime timestamp;
 	private Long size;
 	@Enumerated(value = EnumType.STRING)
 	private LogType logType;

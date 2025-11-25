@@ -17,4 +17,4 @@ spring:
         hibernate:
             naming.implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyHbmImpl
             naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-#            ddl-auto: create-drop
+#            ddl-auto: create

@@ -12,7 +12,7 @@ public class Regexes {
 	private static final String REMOTE_NAME_REGEX = NAME_REGEX;
 	private static final String USER_ID_REGEX = NAME_REGEX;
 	private static final String ACCESS_LOG_TIMESTAMP_REGEX = "\\[(\\d{2}/[A-Za-z]{3}/\\d{4}:\\d{2}:\\d{2}:\\d{2} -\\d{4})]";
-	private static final String HTTP_METHOD_REGEX = "\"([A-Z]{3,}) / HTTP/\\d.\\d\"";
+	private static final String HTTP_METHOD_AND_RESOURCE_REGEX = "\"([A-Z]{3,}) (/[A-Za-z0-9_/\\.]*) HTTP/\\d.\\d\"";
 	private static final String HTTP_RESPONSE_STATUS_REGEX = "(\\d{3})";
 	private static final String INTEGER_NUM_REGEX = "(-?\\d+)";
 	private static final String RESPONSE_SIZE_REGEX = INTEGER_NUM_REGEX;
@@ -28,7 +28,7 @@ public class Regexes {
 							REMOTE_NAME_REGEX,
 							USER_ID_REGEX,
 							ACCESS_LOG_TIMESTAMP_REGEX,
-							HTTP_METHOD_REGEX,
+							HTTP_METHOD_AND_RESOURCE_REGEX,
 							HTTP_RESPONSE_STATUS_REGEX,
 							RESPONSE_SIZE_REGEX,
 							REFERRER_REGEX,
@@ -62,15 +62,12 @@ public class Regexes {
 			START_ANCHOR +
 					String.join(" ", List.of(
 							HDFS_TIMESTAMP_REGEX,
-							"[A-Z]+",
-							"dfs\\.DataNode\\$DataXceiver:",
+							"[A-Z]+ dfs\\.DataNode\\$DataXceiver:",
 							"(Receiving|Received|" + IP_REGEX_RAW + ") (?:Served )?block",
 							BLOCK_ID_REGEX,
-							"(?:src:|to) /" + IP_REGEX,
-							"(?:dest: /" + IP_REGEX + ")?"
-							,"(?:of size " + SIZE_REGEX + ")?"
-
+							"(?:src:|to) /" + IP_REGEX
 					)) +
+					"(?:(?:dest: /" + IP_REGEX + ")? (?:of size " + SIZE_REGEX + ")?)?" +
 					END_ANCHOR
 			;
 

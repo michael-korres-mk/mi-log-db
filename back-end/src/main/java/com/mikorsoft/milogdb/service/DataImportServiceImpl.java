@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +26,7 @@ public class DataImportServiceImpl implements DataImportService {
 
 	private final MiLogRepository miLogRepository;
 
-	public void importFile(LogFile log, String regex) throws IOException {
+	public void importFile(LogFile log, String regex, Long n) throws IOException {
 
 		File file = new ClassPathResource(log.getFilename()).getFile();
 		Pattern p = Pattern.compile(regex);
@@ -41,18 +39,16 @@ public class DataImportServiceImpl implements DataImportService {
 			case LogFile.HDFS_FS_NAMESYSTEM -> this::createHdfsFSNamesystemLogRecord;
 		};
 
-		try(var is = new BufferedReader(new InputStreamReader(new FileInputStream(file)))){
+		try (var is = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
 			String line;
-			// TODO: Remove limit
-			int n = 50;
 			List<MiLog> logs = new ArrayList<>();
-			while ((n > 0) && (line = is.readLine()) != null) {
+
+			while ((n == null || n-- > 0) && (line = is.readLine()) != null) {
 				Matcher m = p.matcher(line);
 				if (m.matches()) {
 					MiLog miLog = method.apply(m);
 					System.out.println(miLog);
 					logs.add(miLog);
-					n--;
 				}
 			}
 			miLogRepository.saveAll(logs);
@@ -66,14 +62,17 @@ public class DataImportServiceImpl implements DataImportService {
 		String remoteName = m.group(2);
 		String userID = m.group(3);
 		String t = m.group(4);
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss Z", Locale.ENGLISH);ZonedDateTime timestamp = ZonedDateTime.parse(t, formatter);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss", Locale.ENGLISH);
+		LocalDateTime timestamp = LocalDateTime.parse(t, formatter);
+
 		String httpMethod = m.group(5);
+		String resourceRequested = m.group(6);
 
 //			HttpStatus httpStatus = HttpStatus.resolve(Integer.parseInt(m.group(6)));
-		int httpStatus = Integer.parseInt(m.group(6));
-		long size = Long.parseLong(m.group(7));
-		String referrer = m.group(8);
-		String userAgent = m.group(9);
+		int httpStatus = Integer.parseInt(m.group(7));
+		long size = Long.parseLong(m.group(8));
+		String referrer = m.group(9);
+		String userAgent = m.group(10);
 
 		return MiLog
 				.builder()
@@ -83,6 +82,7 @@ public class DataImportServiceImpl implements DataImportService {
 				.logType(LogType.ACCESS)
 				.remoteName(remoteName)
 				.userID(userID)
+				.resourceRequested(resourceRequested)
 				.httpMethod(httpMethod)
 				.httpStatus(httpStatus)
 				.referrer(referrer)
@@ -90,12 +90,13 @@ public class DataImportServiceImpl implements DataImportService {
 				.build();
 
 	}
-	private MiLog createHdfsDataXceiverLogRecord(Matcher m){
+
+	private MiLog createHdfsDataXceiverLogRecord(Matcher m) {
 
 		String t = m.group(1);
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd HHmmss");
-		ZonedDateTime timestamp = LocalDateTime.parse(t, formatter).atZone(ZoneId.of("UTC"));
+		LocalDateTime timestamp = LocalDateTime.parse(t, formatter);
 
 		String logType = m.group(2);
 
@@ -104,14 +105,14 @@ public class DataImportServiceImpl implements DataImportService {
 		String srcOrDestIP = m.group(4);
 
 		String destIP = m.group(5);
-		Long size = (m.group(6) == null)? null : Long.parseLong(m.group(6));
+		Long size = (m.group(6) == null) ? null : Long.parseLong(m.group(6));
 
 		MiLog.MiLogBuilder miLogBuilder = MiLog
 				.builder()
 				.timestamp(timestamp)
 				.blockID(blockID);
 
-		if(logType == null){
+		if (logType == null) {
 			throw new RuntimeException("Invalid HDFS FS Namesystem Log !!!");
 		} else if (logType.equals("Receiving")) {
 
@@ -121,16 +122,14 @@ public class DataImportServiceImpl implements DataImportService {
 					.destinationIPs(destIP)
 					.build();
 
-		}
-		else if (logType.equals("Received")) {
+		} else if (logType.equals("Received")) {
 			return miLogBuilder
 					.IP(srcOrDestIP)
 					.logType(LogType.RECEIVED)
 					.destinationIPs(destIP)
 					.size(size)
 					.build();
-		}
-		else if(logType.matches(IP_REGEX_RAW)){
+		} else if (logType.matches(IP_REGEX_RAW)) {
 			return miLogBuilder
 					.IP(logType)
 					.logType(LogType.SERVED)
@@ -143,50 +142,49 @@ public class DataImportServiceImpl implements DataImportService {
 
 	}
 
-	private MiLog createHdfsFSNamesystemLogRecord(Matcher m){
+	private MiLog createHdfsFSNamesystemLogRecord(Matcher m) {
 
 
-			String t = m.group(1);
+		String t = m.group(1);
 
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd HHmmss");
-			ZonedDateTime timestamp = LocalDateTime.parse(t, formatter).atZone(ZoneId.of("UTC"));
-			System.out.println("timestamp = " + timestamp);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd HHmmss");
+		LocalDateTime timestamp = LocalDateTime.parse(t, formatter);
+		System.out.println("timestamp = " + timestamp);
 
-			String replicate = m.group(3);
-			String updated = m.group(6);
+		String replicate = m.group(3);
+		String updated = m.group(6);
 
-			if(replicate != null){
-				String sourceIP = m.group(2);
-				long blockID = Long.parseLong(m.group(4));
-				List<String> IPs = List.of(m.group(5).split(" "));
+		if (replicate != null) {
+			String sourceIP = m.group(2);
+			long blockID = Long.parseLong(m.group(4));
+			List<String> IPs = List.of(m.group(5).split(" "));
 
-				return MiLog
-						.builder()
-						.timestamp(timestamp)
-						.logType(LogType.REPLICATE)
-						.IP(sourceIP)
-						.blockID(blockID)
-						.destinationIPs(String.join(",",IPs))
-						.build();
+			return MiLog
+					.builder()
+					.timestamp(timestamp)
+					.logType(LogType.REPLICATE)
+					.IP(sourceIP)
+					.blockID(blockID)
+					.destinationIPs(String.join(",", IPs))
+					.build();
 
-			} else if (updated != null) {
-				String sourceIP = m.group(7);
-				long blockID = Long.parseLong(m.group(8));
-				long size = Long.parseLong(m.group(9));
+		} else if (updated != null) {
+			String sourceIP = m.group(7);
+			long blockID = Long.parseLong(m.group(8));
+			long size = Long.parseLong(m.group(9));
 
-				return MiLog
-						.builder()
-						.timestamp(timestamp)
-						.logType(LogType.UPDATED)
-						.IP(sourceIP)
-						.blockID(blockID)
-						.size(size)
-						.build();
+			return MiLog
+					.builder()
+					.timestamp(timestamp)
+					.logType(LogType.UPDATED)
+					.IP(sourceIP)
+					.blockID(blockID)
+					.size(size)
+					.build();
 
-			}
-			else {
-				throw new RuntimeException("Invalid HDFS FS Namesystem Log !!!");
-			}
+		} else {
+			throw new RuntimeException("Invalid HDFS FS Namesystem Log !!!");
+		}
 
 	}
 
