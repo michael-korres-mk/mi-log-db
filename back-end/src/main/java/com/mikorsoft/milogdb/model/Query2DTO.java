@@ -1,6 +1,6 @@
 package com.mikorsoft.milogdb.model;
 
-public interface Query1DTO {
-    String getLogtype();
+public interface Query2DTO {
+    Long getDay();
     Long getCount();
 }

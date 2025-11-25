@@ -1,6 +1,8 @@
 package com.mikorsoft.milogdb.controller;
 
+import com.mikorsoft.milogdb.domain.LogType;
 import com.mikorsoft.milogdb.model.Query1DTO;
+import com.mikorsoft.milogdb.model.Query2DTO;
 import com.mikorsoft.milogdb.repository.MiLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,8 +28,8 @@ public class QueryController {
 
 	@GetMapping("/1")
 	ResponseEntity<List<Query1DTO>> query1(
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to
+		@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+		@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to
 	){
 
 		ZoneId zone = ZoneId.systemDefault();
@@ -36,5 +38,20 @@ public class QueryController {
 
 		return ResponseEntity.ok().body(miLogRepository.query1(fromZ,toZ));
 	}
+
+	@GetMapping("/2")
+	ResponseEntity<List<Query2DTO>> query2(
+			LogType logType,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to
+	){
+
+		ZoneId zone = ZoneId.systemDefault();
+		ZonedDateTime fromZ = from.atStartOfDay(zone);
+		ZonedDateTime toZ   = to.plusDays(1).atStartOfDay(zone);  // end is exclusive
+
+		return ResponseEntity.ok().body(miLogRepository.query2(logType.name(),fromZ,toZ));
+	}
+
 
 }

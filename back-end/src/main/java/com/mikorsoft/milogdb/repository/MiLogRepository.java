@@ -2,6 +2,7 @@ package com.mikorsoft.milogdb.repository;
 
 import com.mikorsoft.milogdb.domain.MiLog;
 import com.mikorsoft.milogdb.model.Query1DTO;
+import com.mikorsoft.milogdb.model.Query2DTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -11,15 +12,23 @@ import java.util.List;
 public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 
 	@Query(nativeQuery = true, value = """
-        SELECT l.logtype, COUNT(*) AS total
+        SELECT l.logtype, COUNT(*) AS count
         FROM mi_log_db.mi_logs l
         WHERE l.timestamp >= :from AND l.timestamp <= :to
         GROUP BY l.logtype
-        ORDER BY total DESC
+        ORDER BY count DESC
     """
 	)
 	List<Query1DTO> query1(ZonedDateTime from, ZonedDateTime to);
 
+	@Query(nativeQuery = true, value = """
+        SELECT TO_CHAR(l.timestamp, 'DD') AS day,COUNT(*) AS count
+        FROM mi_log_db.mi_logs l
+        WHERE l.logtype = :logType AND l.timestamp >= :from AND l.timestamp <= :to
+        GROUP BY TO_CHAR(l.timestamp, 'DD')
+    """
+	)
+	List<Query2DTO> query2(String logType, ZonedDateTime from, ZonedDateTime to);
 
 
 //	@Query(nativeQuery = true, value = """
