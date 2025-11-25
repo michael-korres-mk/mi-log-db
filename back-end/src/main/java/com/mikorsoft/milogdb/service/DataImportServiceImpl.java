@@ -68,12 +68,13 @@ public class DataImportServiceImpl implements DataImportService {
 		String t = m.group(4);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss Z", Locale.ENGLISH);ZonedDateTime timestamp = ZonedDateTime.parse(t, formatter);
 		String httpMethod = m.group(5);
+		String resourceRequested = m.group(6);
 
 //			HttpStatus httpStatus = HttpStatus.resolve(Integer.parseInt(m.group(6)));
-		int httpStatus = Integer.parseInt(m.group(6));
-		long size = Long.parseLong(m.group(7));
-		String referrer = m.group(8);
-		String userAgent = m.group(9);
+		int httpStatus = Integer.parseInt(m.group(7));
+		long size = Long.parseLong(m.group(8));
+		String referrer = m.group(9);
+		String userAgent = m.group(10);
 
 		return MiLog
 				.builder()
@@ -83,6 +84,7 @@ public class DataImportServiceImpl implements DataImportService {
 				.logType(LogType.ACCESS)
 				.remoteName(remoteName)
 				.userID(userID)
+				.resourceRequested(resourceRequested)
 				.httpMethod(httpMethod)
 				.httpStatus(httpStatus)
 				.referrer(referrer)
