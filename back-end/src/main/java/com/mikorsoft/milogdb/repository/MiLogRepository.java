@@ -4,6 +4,7 @@ import com.mikorsoft.milogdb.domain.MiLog;
 import com.mikorsoft.milogdb.model.Query1DTO;
 import com.mikorsoft.milogdb.model.Query2DTO;
 import com.mikorsoft.milogdb.model.Query3DTO;
+import com.mikorsoft.milogdb.model.Query4DTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -42,6 +43,18 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 	)
 	List<Query3DTO> query3(Long day);
 
+
+
+	@Query(nativeQuery = true, value = """
+        SELECT TO_CHAR(l.timestamp, 'DD') AS day,l.blockid,COUNT(l.blockid) AS count
+        FROM mi_log_db.mi_logs l
+        WHERE l.blockid IS NOT NULL AND l.timestamp >= :from AND l.timestamp <= :to
+        GROUP BY TO_CHAR(l.timestamp, 'DD'),l.blockid
+        ORDER BY COUNT(l.blockid) DESC
+        LIMIT 5
+    """
+	)
+	List<Query4DTO> query4(ZonedDateTime from, ZonedDateTime to);
 
 
 //	@Query(nativeQuery = true, value = """
