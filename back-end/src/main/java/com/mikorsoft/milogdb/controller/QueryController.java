@@ -91,4 +91,9 @@ public class QueryController {
 		return ResponseEntity.ok().body(miLogRepository.query8());
 	}
 
+	@GetMapping("/9")
+	ResponseEntity<List<Query9DTO>> query9(){
+		return ResponseEntity.ok().body(miLogRepository.query9());
+	}
+
 }
