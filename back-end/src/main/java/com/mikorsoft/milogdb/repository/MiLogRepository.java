@@ -110,6 +110,32 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 	)
 	List<MiLog> query10();
 
+	@Query(nativeQuery = true, value = """
+        SELECT l.IP, COUNT(l.httpmethod) AS count
+        FROM mi_log_db.mi_logs l
+        WHERE l.timestamp >= :from AND l.timestamp <= :to AND l.httpmethod = :httpMethod
+        GROUP BY l.IP
+    """)
+	List<Query111213DTO> query11(ZonedDateTime from, ZonedDateTime to,String httpMethod);
+
+	@Query(nativeQuery = true, value = """
+        SELECT l.IP, COUNT(l.httpmethod) AS count
+        FROM mi_log_db.mi_logs l
+        WHERE l.timestamp >= :from AND l.timestamp <= :to AND l.httpmethod IN :httpMethods
+        GROUP BY l.IP
+        HAVING COUNT(DISTINCT l.httpmethod) = 2;
+    """)
+	List<Query111213DTO> query12(ZonedDateTime from, ZonedDateTime to,List<String> httpMethods);
+
+	@Query(nativeQuery = true, value = """
+        SELECT l.IP, COUNT(l.httpmethod) AS count
+        FROM mi_log_db.mi_logs l
+        WHERE l.timestamp >= :from AND l.timestamp <= :to
+        GROUP BY l.IP
+        HAVING COUNT(DISTINCT l.httpmethod) = 4;
+    """)
+	List<Query111213DTO> query13(ZonedDateTime from, ZonedDateTime to);
+
 
 //	@Query(nativeQuery = true, value = """
 //		SELECT *

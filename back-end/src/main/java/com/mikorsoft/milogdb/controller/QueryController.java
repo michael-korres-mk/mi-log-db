@@ -53,6 +53,7 @@ public class QueryController {
 		return ResponseEntity.ok().body(miLogRepository.query2(logType.name(),fromZ,toZ));
 	}
 
+	// TODO: Change to Long into LocalDate
 	@GetMapping("/3")
 	ResponseEntity<List<Query3DTO>> query3(@RequestParam Long day){
 		return ResponseEntity.ok().body(miLogRepository.query3(day));
@@ -99,6 +100,50 @@ public class QueryController {
 	@GetMapping("/10")
 	ResponseEntity<List<MiLog>> query10(){
 		return ResponseEntity.ok().body(miLogRepository.query10());
+	}
+
+	@GetMapping("/11")
+	ResponseEntity<List<Query111213DTO>> query11(
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
+			@RequestParam String httpMethod
+			){
+
+		// TODO: Change to LocalDateTime
+		ZoneId zone = ZoneId.systemDefault();
+		ZonedDateTime fromZ = from.atStartOfDay(zone);
+		ZonedDateTime toZ   = to.plusDays(1).atStartOfDay(zone);  // end is exclusive
+
+		return ResponseEntity.ok().body(miLogRepository.query11(fromZ,toZ,httpMethod));
+	}
+
+	@GetMapping("/12")
+	ResponseEntity<List<Query111213DTO>> query12(
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
+			@RequestParam List<String> httpMethods
+	){
+
+		// TODO: Change to LocalDateTime
+		ZoneId zone = ZoneId.systemDefault();
+		ZonedDateTime fromZ = from.atStartOfDay(zone);
+		ZonedDateTime toZ   = to.plusDays(1).atStartOfDay(zone);  // end is exclusive
+
+		return ResponseEntity.ok().body(miLogRepository.query12(fromZ,toZ,httpMethods));
+	}
+
+	@GetMapping("/13")
+	ResponseEntity<List<Query111213DTO>> query13(
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to
+	){
+
+		// TODO: Change to LocalDateTime
+		ZoneId zone = ZoneId.systemDefault();
+		ZonedDateTime fromZ = from.atStartOfDay(zone);
+		ZonedDateTime toZ   = to.plusDays(1).atStartOfDay(zone);  // end is exclusive
+
+		return ResponseEntity.ok().body(miLogRepository.query13(fromZ,toZ));
 	}
 
 }
