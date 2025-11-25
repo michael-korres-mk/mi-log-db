@@ -86,4 +86,9 @@ public class QueryController {
 		return ResponseEntity.ok().body(miLogRepository.query7(size));
 	}
 
+	@GetMapping("/8")
+	ResponseEntity<List<Query8DTO>> query8(){
+		return ResponseEntity.ok().body(miLogRepository.query8());
+	}
+
 }

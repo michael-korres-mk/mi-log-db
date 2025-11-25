@@ -82,6 +82,18 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 	)
 	List<MiLog> query7(Long size);
 
+	@Query(nativeQuery = true, value = """
+			SELECT l.blockid,TO_CHAR(l.timestamp, 'DD') AS day
+			FROM mi_log_db.mi_logs l
+			WHERE l.logtype IN ('REPLICATE', 'SERVED')
+			GROUP BY l.blockid,TO_CHAR(l.timestamp, 'DD')
+			HAVING COUNT(DISTINCT l.logtype) = 2;
+			"""
+	)
+	List<Query8DTO> query8();
+
+
+
 
 //	@Query(nativeQuery = true, value = """
 //		SELECT *
