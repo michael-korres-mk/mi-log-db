@@ -102,6 +102,13 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 	)
 	List<Query9DTO> query9();
 
+	@Query(nativeQuery = true, value = """
+			SELECT *
+			FROM mi_log_db.mi_logs l
+			WHERE lower(l.useragent) LIKE '%firefox%'
+			"""
+	)
+	List<MiLog> query10();
 
 
 //	@Query(nativeQuery = true, value = """
