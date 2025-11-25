@@ -63,6 +63,17 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 	)
 	List<Query5DTO> query5();
 
+	@Query(nativeQuery = true, value = """
+		SELECT l.resourcerequested,COUNT(*) AS count
+		FROM mi_log_db.mi_logs l
+		WHERE l.resourcerequested IS NOT NULL
+		GROUP BY l.resourcerequested
+		ORDER BY COUNT(*) DESC
+		OFFSET 1 LIMIT 1
+		"""
+	)
+	List<Query6DTO> query6();
+
 //	@Query(nativeQuery = true, value = """
 //		SELECT *
 //		FROM log_entry
