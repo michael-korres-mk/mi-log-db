@@ -1,6 +1,8 @@
 package com.mikorsoft.milogdb.model;
 
+import java.time.LocalDate;
+
 public interface Query2DTO {
-    Long getDay();
+    LocalDate getDay();
     Long getCount();
 }

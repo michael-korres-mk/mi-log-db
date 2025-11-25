@@ -1,7 +1,9 @@
 package com.mikorsoft.milogdb.model;
 
+import java.time.LocalDate;
+
 public interface Query9DTO {
 	Long getBlockID();
-	Long getDay();
+	LocalDate getDay();
 	Long getHour();
 }

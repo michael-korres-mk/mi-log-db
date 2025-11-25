@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -32,9 +33,8 @@ public class QueryController {
 		return ResponseEntity.ok().body(miLogRepository.query2(logType.name(), from, to));
 	}
 
-	// TODO: Change to Long into LocalDate
 	@GetMapping("/3")
-	ResponseEntity<List<Query3DTO>> query3(@RequestParam Long day) {
+	ResponseEntity<List<Query3DTO>> query3(@RequestParam LocalDate day) {
 		return ResponseEntity.ok().body(miLogRepository.query3(day));
 	}
 

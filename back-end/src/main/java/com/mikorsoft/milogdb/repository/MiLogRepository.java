@@ -5,6 +5,7 @@ import com.mikorsoft.milogdb.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,10 +22,10 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 	List<Query1DTO> query1(LocalDateTime from, LocalDateTime to);
 
 	@Query(nativeQuery = true, value = """
-        SELECT TO_CHAR(l.timestamp, 'DD') AS day,COUNT(*) AS count
+        SELECT CAST(l.timestamp AS date) AS day,COUNT(*) AS count
         FROM mi_log_db.mi_logs l
         WHERE l.logtype = :logType AND l.timestamp >= :from AND l.timestamp <= :to
-        GROUP BY TO_CHAR(l.timestamp, 'DD')
+        GROUP BY CAST(l.timestamp AS date)
     """
 	)
 	List<Query2DTO> query2(String logType, LocalDateTime from, LocalDateTime to);
@@ -32,21 +33,21 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 	@Query(nativeQuery = true, value = """
         SELECT l.ip,COUNT(*) AS count
         FROM mi_log_db.mi_logs l
-        WHERE CAST(TO_CHAR(l.timestamp, 'DD') AS BIGINT) = :day
+        WHERE CAST(l.timestamp AS date) = :day
         GROUP BY l.ip
         ORDER BY COUNT(*) DESC
         LIMIT 1
     """
 	)
-	List<Query3DTO> query3(Long day);
+	List<Query3DTO> query3(LocalDate day);
 
 
 
 	@Query(nativeQuery = true, value = """
-        SELECT TO_CHAR(l.timestamp, 'DD') AS day,l.blockid,COUNT(l.blockid) AS count
+        SELECT CAST(l.timestamp AS date) AS day,l.blockid,COUNT(l.blockid) AS count
         FROM mi_log_db.mi_logs l
         WHERE l.blockid IS NOT NULL AND l.timestamp >= :from AND l.timestamp <= :to
-        GROUP BY TO_CHAR(l.timestamp, 'DD'),l.blockid
+        GROUP BY CAST(l.timestamp AS date),l.blockid
         ORDER BY COUNT(l.blockid) DESC
         LIMIT 5
     """
@@ -83,20 +84,20 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 	List<MiLog> query7(Long size);
 
 	@Query(nativeQuery = true, value = """
-			SELECT l.blockid,TO_CHAR(l.timestamp, 'DD') AS day
+			SELECT l.blockid,CAST(l.timestamp AS date) AS day
 			FROM mi_log_db.mi_logs l
 			WHERE l.logtype IN ('REPLICATE', 'SERVED')
-			GROUP BY l.blockid,TO_CHAR(l.timestamp, 'DD')
+			GROUP BY l.blockid,CAST(l.timestamp AS date)
 			HAVING COUNT(DISTINCT l.logtype) = 2;
 			"""
 	)
 	List<Query8DTO> query8();
 
 	@Query(nativeQuery = true, value = """
-			SELECT l.blockid,TO_CHAR(l.timestamp, 'DD') AS day,EXTRACT(HOUR FROM l.timestamp) AS hour
+			SELECT l.blockid,CAST(l.timestamp AS date) AS day,EXTRACT(HOUR FROM l.timestamp) AS hour
 			FROM mi_log_db.mi_logs l
 			WHERE l.logtype IN ('REPLICATE', 'SERVED')
-			GROUP BY l.blockid,TO_CHAR(l.timestamp, 'DD'),EXTRACT(HOUR FROM l.timestamp)
+			GROUP BY l.blockid,CAST(l.timestamp AS date),EXTRACT(HOUR FROM l.timestamp)
 			HAVING COUNT(DISTINCT l.logtype) = 2;
 			"""
 	)
