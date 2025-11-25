@@ -28,7 +28,7 @@ public class DataImportServiceImpl implements DataImportService {
 
 	private final MiLogRepository miLogRepository;
 
-	public void importFile(LogFile log, String regex) throws IOException {
+	public void importFile(LogFile log, String regex,Long n) throws IOException {
 
 		File file = new ClassPathResource(log.getFilename()).getFile();
 		Pattern p = Pattern.compile(regex);
@@ -43,16 +43,14 @@ public class DataImportServiceImpl implements DataImportService {
 
 		try(var is = new BufferedReader(new InputStreamReader(new FileInputStream(file)))){
 			String line;
-			// TODO: Remove limit
-			int n = 50;
 			List<MiLog> logs = new ArrayList<>();
-			while ((n > 0) && (line = is.readLine()) != null) {
+
+			while ((n == null || n-- > 0) && (line = is.readLine()) != null) {
 				Matcher m = p.matcher(line);
 				if (m.matches()) {
 					MiLog miLog = method.apply(m);
 					System.out.println(miLog);
 					logs.add(miLog);
-					n--;
 				}
 			}
 			miLogRepository.saveAll(logs);
