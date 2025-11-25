@@ -3,6 +3,7 @@ package com.mikorsoft.milogdb.controller;
 import com.mikorsoft.milogdb.domain.LogType;
 import com.mikorsoft.milogdb.model.Query1DTO;
 import com.mikorsoft.milogdb.model.Query2DTO;
+import com.mikorsoft.milogdb.model.Query3DTO;
 import com.mikorsoft.milogdb.repository.MiLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -41,7 +42,7 @@ public class QueryController {
 
 	@GetMapping("/2")
 	ResponseEntity<List<Query2DTO>> query2(
-			LogType logType,
+			@RequestParam LogType logType,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to
 	){
@@ -53,5 +54,9 @@ public class QueryController {
 		return ResponseEntity.ok().body(miLogRepository.query2(logType.name(),fromZ,toZ));
 	}
 
+	@GetMapping("/3")
+	ResponseEntity<List<Query3DTO>> query3(@RequestParam Long day){
+		return ResponseEntity.ok().body(miLogRepository.query3(day));
+	}
 
 }
