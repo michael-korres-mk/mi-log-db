@@ -62,15 +62,12 @@ public class Regexes {
 			START_ANCHOR +
 					String.join(" ", List.of(
 							HDFS_TIMESTAMP_REGEX,
-							"[A-Z]+",
-							"dfs\\.DataNode\\$DataXceiver:",
+							"[A-Z]+ dfs\\.DataNode\\$DataXceiver:",
 							"(Receiving|Received|" + IP_REGEX_RAW + ") (?:Served )?block",
 							BLOCK_ID_REGEX,
-							"(?:src:|to) /" + IP_REGEX,
-							"(?:dest: /" + IP_REGEX + ")?"
-							,"(?:of size " + SIZE_REGEX + ")?"
-
+							"(?:src:|to) /" + IP_REGEX
 					)) +
+					"(?:(?:dest: /" + IP_REGEX + ")? (?:of size " + SIZE_REGEX + ")?)?" +
 					END_ANCHOR
 			;
 
