@@ -1,10 +1,7 @@
 package com.mikorsoft.milogdb.repository;
 
 import com.mikorsoft.milogdb.domain.MiLog;
-import com.mikorsoft.milogdb.model.Query1DTO;
-import com.mikorsoft.milogdb.model.Query2DTO;
-import com.mikorsoft.milogdb.model.Query3DTO;
-import com.mikorsoft.milogdb.model.Query4DTO;
+import com.mikorsoft.milogdb.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -56,6 +53,19 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 	)
 	List<Query4DTO> query4(ZonedDateTime from, ZonedDateTime to);
 
+	@Query(nativeQuery = true, value = """
+		SELECT l.referrer
+		FROM mi_log_db.mi_logs l
+		WHERE l.referrer IS NOT NULL AND l.referrer <> '-' AND l.resourcerequested IS NOT NULL
+		AND EXISTS(
+			SELECT 1
+			FROM mi_log_db.mi_logs l2
+			WHERE l2.referrer IS NOT NULL AND l2.referrer <> '-' AND l2.resourcerequested IS NOT NULL
+			AND l.referrer = l2.referrer AND l.resourcerequested <> l2.resourcerequested
+		)
+		"""
+	)
+	List<Query5DTO> query5();
 
 //	@Query(nativeQuery = true, value = """
 //		SELECT *

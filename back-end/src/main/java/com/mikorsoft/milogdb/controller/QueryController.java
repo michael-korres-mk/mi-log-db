@@ -1,10 +1,7 @@
 package com.mikorsoft.milogdb.controller;
 
 import com.mikorsoft.milogdb.domain.LogType;
-import com.mikorsoft.milogdb.model.Query1DTO;
-import com.mikorsoft.milogdb.model.Query2DTO;
-import com.mikorsoft.milogdb.model.Query3DTO;
-import com.mikorsoft.milogdb.model.Query4DTO;
+import com.mikorsoft.milogdb.model.*;
 import com.mikorsoft.milogdb.repository.MiLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -73,4 +70,8 @@ public class QueryController {
 		return ResponseEntity.ok().body(miLogRepository.query4(fromZ,toZ));
 	}
 
+	@GetMapping("/5")
+	ResponseEntity<List<Query5DTO>> query5(){
+		return ResponseEntity.ok().body(miLogRepository.query5());
+	}
 }
