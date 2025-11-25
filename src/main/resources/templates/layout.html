@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+
+<header th:fragment="siteHeader">
+    <h1>My App</h1>
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/logs}">Logs</a>
+    </nav>
+    <hr/>
+</header>
+
+<footer th:fragment="siteFooter">
+    <hr/>
+    <p>&copy; 2025</p>
+</footer>
+
+</body>
+</html>
