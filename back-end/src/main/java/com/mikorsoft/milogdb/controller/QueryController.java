@@ -1,6 +1,7 @@
 package com.mikorsoft.milogdb.controller;
 
 import com.mikorsoft.milogdb.domain.LogType;
+import com.mikorsoft.milogdb.domain.MiLog;
 import com.mikorsoft.milogdb.model.*;
 import com.mikorsoft.milogdb.repository.MiLogRepository;
 import lombok.RequiredArgsConstructor;
@@ -80,5 +81,9 @@ public class QueryController {
 		return ResponseEntity.ok().body(miLogRepository.query6());
 	}
 
+	@GetMapping("/7")
+	ResponseEntity<List<MiLog>> query7(@RequestParam Long size){
+		return ResponseEntity.ok().body(miLogRepository.query7(size));
+	}
 
 }
