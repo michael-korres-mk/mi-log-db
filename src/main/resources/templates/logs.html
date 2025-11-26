@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Home</title>
+</head>
+<body>
+
+<!-- include header from layout.html -->
+<div th:replace="~{layout :: siteHeader}"></div>
+
+
+<div>Select query:</div>
+<nav th:if="${logs == null}">
+    <a th:each="n : ${#numbers.sequence(1,13)}"
+       th:text="${n}"
+       th:href="@{/logs/{qid}(qid=${n})}"
+       style="margin-right: 10px;"></a>
+</nav>
+
+<h3 th:text="${queryTitle}"></h3>
+
+
+<!--<th th:each="entry : ${#lists.seq(logs[0].entrySet())}" th:text="${entry.key}">Header</th>-->
+
+<section th:if="${logs != null and !#lists.isEmpty(logs)}">
+    <table>
+        <thead>
+        <tr>
+            <th th:each="entry : ${#lists.seq(logs[0].entrySet())}"
+                th:text="${entry.key}">Header</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="row : ${logs}">
+            <td th:each="cell : ${row.entrySet()}"
+                th:text="${cell.value}">Value</td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- include footer from layout.html -->
+<div th:replace="~{layout :: siteFooter}"></div>
+
+</body>
+</html>
