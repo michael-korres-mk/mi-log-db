@@ -19,7 +19,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
         ORDER BY count DESC
     """
 	)
-	List<Query1DTO> query1(LocalDateTime from, LocalDateTime to);
+	List<QueryDTO> query1(LocalDateTime from, LocalDateTime to);
 
 	@Query(nativeQuery = true, value = """
         SELECT CAST(l.timestamp AS date) AS day,COUNT(*) AS count
@@ -28,7 +28,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
         GROUP BY CAST(l.timestamp AS date)
     """
 	)
-	List<Query2DTO> query2(String logType, LocalDateTime from, LocalDateTime to);
+	List<QueryDTO> query2(String logType, LocalDateTime from, LocalDateTime to);
 
 	@Query(nativeQuery = true, value = """
         SELECT l.ip,COUNT(*) AS count
@@ -39,7 +39,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
         LIMIT 1
     """
 	)
-	List<Query3DTO> query3(LocalDate day);
+	List<QueryDTO> query3(LocalDate day);
 
 
 
@@ -52,7 +52,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
         LIMIT 5
     """
 	)
-	List<Query4DTO> query4(LocalDateTime from, LocalDateTime to);
+	List<QueryDTO> query4(LocalDateTime from, LocalDateTime to);
 
 	@Query(nativeQuery = true, value = """
 		SELECT l.referrer,COUNT(DISTINCT l.resourcerequested) AS count
@@ -62,7 +62,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 		HAVING COUNT(DISTINCT l.resourcerequested) > 1;
 		"""
 	)
-	List<Query5DTO> query5();
+	List<QueryDTO> query5();
 
 	@Query(nativeQuery = true, value = """
 		SELECT l.resourcerequested,COUNT(*) AS count
@@ -73,7 +73,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 		OFFSET 1 LIMIT 1
 		"""
 	)
-	List<Query6DTO> query6();
+	List<QueryDTO> query6();
 
 	@Query(nativeQuery = true, value = """
 		SELECT *
@@ -81,7 +81,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 		WHERE l.size IS NOT NULL AND size < :size
 		"""
 	)
-	List<MiLog> query7(Long size);
+	List<QueryDTO> query7(Long size);
 
 	@Query(nativeQuery = true, value = """
 			SELECT l.blockid,CAST(l.timestamp AS date) AS day
@@ -91,7 +91,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 			HAVING COUNT(DISTINCT l.logtype) = 2;
 			"""
 	)
-	List<Query8DTO> query8();
+	List<QueryDTO> query8();
 
 	@Query(nativeQuery = true, value = """
 			SELECT l.blockid,CAST(l.timestamp AS date) AS day,EXTRACT(HOUR FROM l.timestamp) AS hour
@@ -101,7 +101,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 			HAVING COUNT(DISTINCT l.logtype) = 2;
 			"""
 	)
-	List<Query9DTO> query9();
+	List<QueryDTO> query9();
 
 	@Query(nativeQuery = true, value = """
 			SELECT *
@@ -109,7 +109,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 			WHERE lower(l.useragent) LIKE '%firefox%'
 			"""
 	)
-	List<MiLog> query10();
+	List<QueryDTO> query10();
 
 	@Query(nativeQuery = true, value = """
         SELECT l.IP, COUNT(l.httpmethod) AS count
@@ -117,7 +117,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
         WHERE l.timestamp >= :from AND l.timestamp <= :to AND l.httpmethod = :httpMethod
         GROUP BY l.IP
     """)
-	List<Query111213DTO> query11(LocalDateTime from, LocalDateTime to,String httpMethod);
+	List<QueryDTO> query11(LocalDateTime from, LocalDateTime to,String httpMethod);
 
 	@Query(nativeQuery = true, value = """
         SELECT l.IP, COUNT(l.httpmethod) AS count
@@ -126,7 +126,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
         GROUP BY l.IP
         HAVING COUNT(DISTINCT l.httpmethod) = 2;
     """)
-	List<Query111213DTO> query12(LocalDateTime from, LocalDateTime to,List<String> httpMethods);
+	List<QueryDTO> query12(LocalDateTime from, LocalDateTime to,List<String> httpMethods);
 
 	@Query(nativeQuery = true, value = """
         SELECT l.IP, COUNT(l.httpmethod) AS count
@@ -135,7 +135,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
         GROUP BY l.IP
         HAVING COUNT(DISTINCT l.httpmethod) = 4;
     """)
-	List<Query111213DTO> query13(LocalDateTime from, LocalDateTime to);
+	List<QueryDTO> query13(LocalDateTime from, LocalDateTime to);
 
 
 //	@Query(nativeQuery = true, value = """
