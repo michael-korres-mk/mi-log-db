@@ -1,27 +1,30 @@
 package com.mikorsoft.milogdb.ui;
 
-import com.mikorsoft.milogdb.model.QueryDTO;
+import com.mikorsoft.milogdb.domain.LogType;
+import com.mikorsoft.milogdb.domain.MiLogColumn;
 import com.mikorsoft.milogdb.repository.MiLogRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static com.mikorsoft.milogdb.domain.MiLogColumns.*;
+import static com.mikorsoft.milogdb.domain.MiLogColumn.*;
 
 @Controller
 @RequestMapping("/logs")
 public class LogController {
 
 	private final MiLogRepository miLogRepository;
-	private final Map<Long,QueryUIComponent> queryUIComponents;
+	private final Map<Integer, QueryUIComponent> queryUIComponents;
 
 
 	public LogController(MiLogRepository miLogRepository) {
@@ -44,22 +47,19 @@ public class LogController {
 //  13. Find IPs that have issued any four distinct HTTP methods on a particular time range.
 
 
-
-		queryUIComponents.put(1L,new QueryUIComponent(1L,"1. Find the total logs per type that were created within a specified time range and sort them in a descending order.", Stream.of(LOG_TYPE, COUNT).toList()));
-		queryUIComponents.put(2L,new QueryUIComponent(2L,"2. Find the total logs per day for a specific action type and time range.", Stream.of(DAY, COUNT).toList()));
-		queryUIComponents.put(3L,new QueryUIComponent(3L,"3. Find the most common log per source IP for a specific day.", Stream.of(DAY, COUNT).toList()));
-		queryUIComponents.put(4L,new QueryUIComponent(4L,"4. Find the top-5 Block IDs with regards to total number of actions per day for a specific date range (for types that Block ID is available)", Stream.of(BLOCK_ID, DAY, COUNT).toList()));
-		queryUIComponents.put(5L,new QueryUIComponent(5L,"5. Find the referrers (if any) that have led to more than one resources.", Stream.of(REFERRER, COUNT).toList()));
-		queryUIComponents.put(6L,new QueryUIComponent(6L,"6. Find the 2nd–most–common resource requested.", Stream.of(RESOURCE_REQUESTED, COUNT).toList()));
-		// TODO: Add fields
-		queryUIComponents.put(7L,new QueryUIComponent(7L,"7. Find the access log (all fields) where the size is less than a specified number.", List.of()));
-		queryUIComponents.put(8L,new QueryUIComponent(8L,"8. Find the blocks that have been replicated the same day that they have also been served.", Stream.of(BLOCK_ID,DAY).toList()));
-		queryUIComponents.put(9L,new QueryUIComponent(9L,"9. Find the blocks that have been replicated the same day and hour that they have also been served.", Stream.of(BLOCK_ID, DAY, HOUR).toList()));
-		// TODO: Add fields
-		queryUIComponents.put(10L,new QueryUIComponent(10L,"10. Find access logs that specified a particular version of Firefox as their browser.", List.of()));
-		queryUIComponents.put(11L,new QueryUIComponent(11L,"11. Find IPs that have issued a particular HTTP method on a particular time range.", Stream.of(IP, COUNT).toList()));
-		queryUIComponents.put(12L,new QueryUIComponent(12L,"12. Find IPs that have issued two particular HTTP methods on a particular time range.", Stream.of(IP, COUNT).toList()));
-		queryUIComponents.put(13L,new QueryUIComponent(13L,"13. Find IPs that have issued any four distinct HTTP methods on a particular time range.", Stream.of(IP, COUNT).toList()));
+		queryUIComponents.put(1, new QueryUIComponent(1L, "1. Find the total logs per type that were created within a specified time range and sort them in a descending order.", Stream.of(LOG_TYPE, COUNT).toList()));
+		queryUIComponents.put(2, new QueryUIComponent(2L, "2. Find the total logs per day for a specific action type and time range.", Stream.of(DAY, COUNT).toList()));
+		queryUIComponents.put(3, new QueryUIComponent(3L, "3. Find the most common log per source IP for a specific day.", Stream.of(DAY, COUNT).toList()));
+		queryUIComponents.put(4, new QueryUIComponent(4L, "4. Find the top-5 Block IDs with regards to total number of actions per day for a specific date range (for types that Block ID is available)", Stream.of(BLOCK_ID, DAY, COUNT).toList()));
+		queryUIComponents.put(5, new QueryUIComponent(5L, "5. Find the referrers (if any) that have led to more than one resources.", Stream.of(REFERRER, COUNT).toList()));
+		queryUIComponents.put(6, new QueryUIComponent(6L, "6. Find the 2nd–most–common resource requested.", Stream.of(RESOURCE_REQUESTED, COUNT).toList()));
+		queryUIComponents.put(7, new QueryUIComponent(7L, "7. Find the access log (all fields) where the size is less than a specified number.", MiLogColumn.miLogColumns()));
+		queryUIComponents.put(8, new QueryUIComponent(8L, "8. Find the blocks that have been replicated the same day that they have also been served.", Stream.of(BLOCK_ID, DAY).toList()));
+		queryUIComponents.put(9, new QueryUIComponent(9L, "9. Find the blocks that have been replicated the same day and hour that they have also been served.", Stream.of(BLOCK_ID, DAY, HOUR).toList()));
+		queryUIComponents.put(10, new QueryUIComponent(10L, "10. Find access logs that specified a particular version of Firefox as their browser.", MiLogColumn.miLogColumns()));
+		queryUIComponents.put(11, new QueryUIComponent(11L, "11. Find IPs that have issued a particular HTTP method on a particular time range.", Stream.of(IP, COUNT).toList()));
+		queryUIComponents.put(12, new QueryUIComponent(12L, "12. Find IPs that have issued two particular HTTP methods on a particular time range.", Stream.of(IP, COUNT).toList()));
+		queryUIComponents.put(13, new QueryUIComponent(13L, "13. Find IPs that have issued any four distinct HTTP methods on a particular time range.", Stream.of(IP, COUNT).toList()));
 	}
 
 	@GetMapping
@@ -68,9 +68,32 @@ public class LogController {
 	}
 
 	@GetMapping("/{qid}")
-	String query(@PathVariable Long qid, Model model) {
+	String query(@PathVariable int qid,
+	             @RequestParam(required = false) LocalDateTime from,
+	             @RequestParam(required = false) LocalDateTime to,
+	             @RequestParam(required = false) LogType logType,
+	             @RequestParam(required = false) LocalDate day,
+	             @RequestParam(required = false) Long size,
+	             @RequestParam(required = false) String httpMethod,
+	             @RequestParam(required = false) List<String> httpMethods,
+	             Model model) {
 
-		List<Map<String, Object>> logs = miLogRepository.query1(LocalDateTime.of(2002,11,1,0,0),LocalDateTime.of(2022,11,1,0,0)).stream().map((QueryDTO log) -> dtoToMap(log,queryUIComponents.get(qid).columns())).toList();
+		List<Map<String, Object>> logs = (switch (qid) {
+			case 1 -> miLogRepository.query1(from, to);
+			case 2 -> miLogRepository.query2(logType.name(), from, to);
+			case 3 -> miLogRepository.query3(day);
+			case 4 -> miLogRepository.query4(from, to);
+			case 5 -> miLogRepository.query5();
+			case 6 -> miLogRepository.query6();
+			case 7 -> miLogRepository.query7(size);
+			case 8 -> miLogRepository.query8();
+			case 9 -> miLogRepository.query9();
+			case 10 -> miLogRepository.query10();
+			case 11 -> miLogRepository.query11(from, to, httpMethod);
+			case 12 -> miLogRepository.query12(from, to, httpMethods);
+			case 13 -> miLogRepository.query13(from, to);
+			default -> throw new IllegalStateException("Unexpected value: " + qid);
+		}).stream().map(log -> dtoToMap(log, queryUIComponents.get(qid).columns())).toList();
 
 		model.addAttribute("queryTitle", queryUIComponents.get(qid).title());
 		model.addAttribute("tableColumns", queryUIComponents.get(qid).columns());

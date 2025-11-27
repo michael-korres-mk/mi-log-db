@@ -1,7 +1,7 @@
 package com.mikorsoft.milogdb.ui;
 
-import com.mikorsoft.milogdb.domain.MiLogColumns;
+import com.mikorsoft.milogdb.domain.MiLogColumn;
 
 import java.util.List;
 
-public record QueryUIComponent (Long qid,String title, List<MiLogColumns> columns) {}
+public record QueryUIComponent(Long qid, String title, List<MiLogColumn> columns) {}

@@ -81,7 +81,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 		WHERE l.size IS NOT NULL AND size < :size
 		"""
 	)
-	List<MiLog> query7(Long size);
+	List<QueryDTO> query7(Long size);
 
 	@Query(nativeQuery = true, value = """
 			SELECT l.blockid,CAST(l.timestamp AS date) AS day
@@ -109,7 +109,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 			WHERE lower(l.useragent) LIKE '%firefox%'
 			"""
 	)
-	List<MiLog> query10();
+	List<QueryDTO> query10();
 
 	@Query(nativeQuery = true, value = """
         SELECT l.IP, COUNT(l.httpmethod) AS count
