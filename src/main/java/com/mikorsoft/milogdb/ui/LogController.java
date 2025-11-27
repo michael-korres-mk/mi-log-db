@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,12 +40,13 @@ public class LogController {
 		queryUIComponents.put(4, new QueryUIComponent(4L, "4. Find the top-5 Block IDs with regards to total number of actions per day for a specific date range (for types that Block ID is available)", List.of(BLOCK_ID, MiLogColumn.DAY, COUNT),MiLogFilter.timerange()));
 		queryUIComponents.put(5, new QueryUIComponent(5L, "5. Find the referrers (if any) that have led to more than one resources.", List.of(REFERRER, COUNT),MiLogFilter.none()));
 		queryUIComponents.put(6, new QueryUIComponent(6L, "6. Find the 2nd–most–common resource requested.", List.of(RESOURCE_REQUESTED, COUNT),MiLogFilter.none()));
+		// TODO: Only access logs
 		queryUIComponents.put(7, new QueryUIComponent(7L, "7. Find the access log (all fields) where the size is less than a specified number.", MiLogColumn.miLogColumns(),List.of(MiLogFilter.SIZE)));
 		queryUIComponents.put(8, new QueryUIComponent(8L, "8. Find the blocks that have been replicated the same day that they have also been served.", List.of(BLOCK_ID, MiLogColumn.DAY),MiLogFilter.none()));
 		queryUIComponents.put(9, new QueryUIComponent(9L, "9. Find the blocks that have been replicated the same day and hour that they have also been served.", List.of(BLOCK_ID, MiLogColumn.DAY, HOUR),MiLogFilter.none()));
 		queryUIComponents.put(10, new QueryUIComponent(10L, "10. Find access logs that specified a particular version of Firefox as their browser.", MiLogColumn.miLogColumns(),MiLogFilter.none()));
-		queryUIComponents.put(11, new QueryUIComponent(11L, "11. Find IPs that have issued a particular HTTP method on a particular time range.", List.of(IP, COUNT),MiLogFilter.timerange()));
-		queryUIComponents.put(12, new QueryUIComponent(12L, "12. Find IPs that have issued two particular HTTP methods on a particular time range.", List.of(IP, COUNT), Stream.concat(MiLogFilter.timerange().stream(),Stream.of(MiLogFilter.HTTP_METHOD)).toList()));
+		queryUIComponents.put(11, new QueryUIComponent(11L, "11. Find IPs that have issued a particular HTTP method on a particular time range.", List.of(IP, COUNT),Stream.concat(MiLogFilter.timerange().stream(),Stream.of(MiLogFilter.HTTP_METHOD)).toList()));
+		queryUIComponents.put(12, new QueryUIComponent(12L, "12. Find IPs that have issued two particular HTTP methods on a particular time range.", List.of(IP, COUNT), Stream.concat(MiLogFilter.timerange().stream(),Stream.of(MiLogFilter.HTTP_METHODS)).toList()));
 		queryUIComponents.put(13, new QueryUIComponent(13L, "13. Find IPs that have issued any four distinct HTTP methods on a particular time range.", List.of(IP, COUNT),Stream.concat(MiLogFilter.timerange().stream(),Stream.of(MiLogFilter.HTTP_METHODS)).toList()));
 	}
 
@@ -80,7 +82,7 @@ public class LogController {
 			case 9 -> miLogRepository.query9();
 			case 10 -> miLogRepository.query10();
 			case 11 -> miLogRepository.query11(fromT, toT, httpMethod);
-			case 12 -> miLogRepository.query12(fromT, toT, httpMethods);
+			case 12 -> miLogRepository.query12(fromT, toT, (httpMethods != null)? httpMethods: new ArrayList<>());
 			case 13 -> miLogRepository.query13(fromT, toT);
 			default -> throw new IllegalStateException("Unexpected value: " + qid);
 		}).stream().map(log -> dtoToMap(log, queryUIComponents.get(qid).columns())).toList();

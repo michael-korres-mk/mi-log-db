@@ -29,7 +29,7 @@
     <div th:each="fil : ${filters}">
         <label>
             <span th:text="${fil.title}"></span>
-            <input th:type="${fil.uiType}" th:name="${fil.field}" th:value="${params[fil.field]}"/>
+            <input th:type="${fil.uiType}" th:name="${fil.field}" th:value="${params[fil.field]} ?: (${fil.defaultValue} ?: '')" />
         </label>
     </div>
 
