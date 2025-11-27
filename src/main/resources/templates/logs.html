@@ -22,17 +22,24 @@
 
 <!--<th th:each="entry : ${#lists.seq(logs[0].entrySet())}" th:text="${entry.key}">Header</th>-->
 
-<section th:if="${tableColumns != null and !#lists.isEmpty(tableColumns)}">
+<section th:if="${filters != null and !#lists.isEmpty(filters)}">
+    <label th:each="fil : ${filters}">
+        <span th:text="${fil.title}" />
+        <input th:type="${fil.uiType}" />
+    </label>
+</section>
+
+<section th:if="${columns != null and !#lists.isEmpty(columns)}">
     <table border="1">
         <thead>
         <tr>
-            <th th:each="col : ${tableColumns}" th:text="${col.title}"></th>
+            <th th:each="col : ${columns}" th:text="${col.title}"></th>
         </tr>
         </thead>
 
         <tbody>
         <tr th:each="row : ${logs}">
-            <td th:each="col : ${tableColumns}" th:text="${row[col.field]}"></td>
+            <td th:each="col : ${columns}" th:text="${row[col.field]}"></td>
         </tr>
         </tbody>
     </table>

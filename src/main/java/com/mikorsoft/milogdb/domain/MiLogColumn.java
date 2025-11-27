@@ -12,6 +12,7 @@ import java.util.function.Function;
 @Getter
 @RequiredArgsConstructor
 public enum MiLogColumn {
+
 	DAY("day", "Day", "date", QueryDTO::getDay),
 	HOUR("hour", "Hour", "number", QueryDTO::getHour),
 	LOG_TYPE("logtype", "Log Type", "text", QueryDTO::getLogType),
