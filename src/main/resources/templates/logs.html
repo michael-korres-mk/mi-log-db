@@ -10,7 +10,7 @@
 
 
 <div>Select query:</div>
-<nav th:if="${logs == null}">
+<nav>
     <a th:each="n : ${#numbers.sequence(1,13)}"
        th:text="${n}"
        th:href="@{/logs/{qid}(qid=${n})}"
@@ -22,19 +22,17 @@
 
 <!--<th th:each="entry : ${#lists.seq(logs[0].entrySet())}" th:text="${entry.key}">Header</th>-->
 
-<section th:if="${logs != null and !#lists.isEmpty(logs)}">
-    <table>
+<section th:if="${tableColumns != null and !#lists.isEmpty(tableColumns)}">
+    <table border="1">
         <thead>
         <tr>
-            <th th:each="entry : ${#lists.seq(logs[0].entrySet())}"
-                th:text="${entry.key}">Header</th>
+            <th th:each="col : ${tableColumns}" th:text="${col.title}"></th>
         </tr>
         </thead>
 
         <tbody>
         <tr th:each="row : ${logs}">
-            <td th:each="cell : ${row.entrySet()}"
-                th:text="${cell.value}">Value</td>
+            <td th:each="col : ${tableColumns}" th:text="${row[col.field]}"></td>
         </tr>
         </tbody>
     </table>
