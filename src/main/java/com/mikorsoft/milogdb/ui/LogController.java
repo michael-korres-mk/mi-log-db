@@ -55,29 +55,33 @@ public class LogController {
 
 	@GetMapping("/{qid}")
 	String query(@PathVariable int qid,
-	             @RequestParam(required = false) LocalDateTime from,
-	             @RequestParam(required = false) LocalDateTime to,
+	             @RequestParam(required = false) LocalDate from,
+	             @RequestParam(required = false) LocalDate to,
 	             @RequestParam(required = false) LogType logType,
 	             @RequestParam(required = false) LocalDate day,
 	             @RequestParam(required = false) Long size,
 	             @RequestParam(required = false) String httpMethod,
 	             @RequestParam(required = false) List<String> httpMethods,
+	             @RequestParam Map<String, String> params,
 	             Model model) {
 
+		LocalDateTime fromT = (from != null)?from.atStartOfDay(): null;
+		LocalDateTime toT = (to != null)?to.plusDays(1).atStartOfDay():null;
+
 		List<Map<String, Object>> logs = (switch (qid) {
-			case 1 -> miLogRepository.query1(from, to);
-			case 2 -> miLogRepository.query2((logType != null)? logType.name():null, from, to);
+			case 1 -> miLogRepository.query1(fromT, toT);
+			case 2 -> miLogRepository.query2((logType != null)? logType.name():null, fromT, toT);
 			case 3 -> miLogRepository.query3(day);
-			case 4 -> miLogRepository.query4(from, to);
+			case 4 -> miLogRepository.query4(fromT, toT);
 			case 5 -> miLogRepository.query5();
 			case 6 -> miLogRepository.query6();
 			case 7 -> miLogRepository.query7(size);
 			case 8 -> miLogRepository.query8();
 			case 9 -> miLogRepository.query9();
 			case 10 -> miLogRepository.query10();
-			case 11 -> miLogRepository.query11(from, to, httpMethod);
-			case 12 -> miLogRepository.query12(from, to, httpMethods);
-			case 13 -> miLogRepository.query13(from, to);
+			case 11 -> miLogRepository.query11(fromT, toT, httpMethod);
+			case 12 -> miLogRepository.query12(fromT, toT, httpMethods);
+			case 13 -> miLogRepository.query13(fromT, toT);
 			default -> throw new IllegalStateException("Unexpected value: " + qid);
 		}).stream().map(log -> dtoToMap(log, queryUIComponents.get(qid).columns())).toList();
 
@@ -85,7 +89,7 @@ public class LogController {
 		model.addAttribute("filters", queryUIComponents.get(qid).filters());
 		model.addAttribute("columns", queryUIComponents.get(qid).columns());
 		model.addAttribute("logs", logs);
-
+		model.addAttribute("params", params);
 
 		return "logs";
 

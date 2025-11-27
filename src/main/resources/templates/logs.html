@@ -22,12 +22,20 @@
 
 <!--<th th:each="entry : ${#lists.seq(logs[0].entrySet())}" th:text="${entry.key}">Header</th>-->
 
-<section th:if="${filters != null and !#lists.isEmpty(filters)}">
-    <label th:each="fil : ${filters}">
-        <span th:text="${fil.title}" />
-        <input th:type="${fil.uiType}" />
-    </label>
-</section>
+<form th:if="${filters != null and !#lists.isEmpty(filters)}"
+      th:action="@{/logs/{qid}(qid=${qid})}"
+      method="get">
+
+    <div th:each="fil : ${filters}">
+        <label>
+            <span th:text="${fil.title}"></span>
+            <input th:type="${fil.uiType}" th:name="${fil.field}" th:value="${params[fil.field]}"/>
+        </label>
+    </div>
+
+    <button type="submit">Run</button>
+</form>
+
 
 <section th:if="${columns != null and !#lists.isEmpty(columns)}">
     <table border="1">
