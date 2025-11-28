@@ -16,7 +16,8 @@ public enum MiLogFilter {
 	HOUR("hour", "Hour", "number", "1"),
 	SIZE("size", "Size", "number","286"),
 	HTTP_METHOD("httpMethod", "HTTP Method", "text","GET"),
-	HTTP_METHODS("httpMethods", "HTTP Methods", "text","GET,POST")
+	HTTP_METHODS("httpMethods", "HTTP Methods", "text","GET,POST"),
+	IP("IP", "IP", "text","")
 
 	;
 

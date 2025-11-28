@@ -48,6 +48,7 @@ public class LogController {
 		queryUIComponents.put(11, new QueryUIComponent(11L, "11. Find IPs that have issued a particular HTTP method on a particular time range.", List.of(IP, COUNT),Stream.concat(MiLogFilter.timerange().stream(),Stream.of(MiLogFilter.HTTP_METHOD)).toList()));
 		queryUIComponents.put(12, new QueryUIComponent(12L, "12. Find IPs that have issued two particular HTTP methods on a particular time range.", List.of(IP, COUNT), Stream.concat(MiLogFilter.timerange().stream(),Stream.of(MiLogFilter.HTTP_METHODS)).toList()));
 		queryUIComponents.put(13, new QueryUIComponent(13L, "13. Find IPs that have issued any four distinct HTTP methods on a particular time range.", List.of(IP, COUNT),Stream.concat(MiLogFilter.timerange().stream(),Stream.of(MiLogFilter.HTTP_METHODS)).toList()));
+		queryUIComponents.put(14, new QueryUIComponent(14L, "Search by IP", MiLogColumn.miLogColumns(),List.of(MiLogFilter.IP)));
 	}
 
 	@GetMapping
@@ -64,6 +65,7 @@ public class LogController {
 	             @RequestParam(required = false) Long size,
 	             @RequestParam(required = false) String httpMethod,
 	             @RequestParam(required = false) List<String> httpMethods,
+	             @RequestParam(required = false) String IP,
 	             @RequestParam Map<String, String> params,
 	             Model model) {
 
@@ -84,6 +86,7 @@ public class LogController {
 			case 11 -> miLogRepository.query11(fromT, toT, httpMethod);
 			case 12 -> miLogRepository.query12(fromT, toT, (httpMethods != null)? httpMethods: new ArrayList<>());
 			case 13 -> miLogRepository.query13(fromT, toT);
+			case 14 -> miLogRepository.findByIP(IP);
 			default -> throw new IllegalStateException("Unexpected value: " + qid);
 		}).stream().map(log -> dtoToMap(log, queryUIComponents.get(qid).columns())).toList();
 
@@ -96,4 +99,5 @@ public class LogController {
 		return "logs";
 
 	}
+
 }

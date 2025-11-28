@@ -17,6 +17,10 @@
            th:text="${n}"
            th:href="@{/logs/{qid}(qid=${n})}"
            style="margin-right: 10px;"></a>
+        <a
+           th:text="'Search by IP'"
+           th:href="@{/logs/14}"
+           style="margin-right: 10px;"></a>
     </nav>
 
     <h3 th:text="${queryTitle}"></h3>
