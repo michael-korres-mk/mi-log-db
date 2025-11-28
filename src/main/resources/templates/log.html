@@ -10,13 +10,13 @@
         <!-- include header from layout.html -->
         <div th:replace="~{layout :: siteHeader}"></div>
 
-        <form class="row g-3 align-items-end mb-3" th:action="@{/logs/persist/{id}(id=${log['id']})}" method="post">
+        <form class="row g-3 align-items-end mb-3" th:action="@{/logs/persist/{id}(id=${log != null ? log.id : 0})}" method="post">
 
             <div class="row">
                 <div class="col-md-6 mb-3" th:each="col : ${columns}">
                     <label>
                         <span th:text="${col.title}"></span>
-                        <input th:type="${col.uiType}" th:name="${col.field}" th:value="${log[col.field]}" th:disabled="${col.field == 'id'}" />
+                        <input th:type="${col.uiType}" th:name="${col.field}" th:value="${log != null ? log.id : ''}" th:disabled="${col.field == 'id'}" />
                     </label>
                 </div>
             </div>
