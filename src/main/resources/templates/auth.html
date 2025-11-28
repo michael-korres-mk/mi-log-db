@@ -25,14 +25,15 @@
     <form th:action="@{'/' + ${(mode == 0) ? 'login' : 'signup'}}" method="post" class="mt-4">
         <h4 th:text="(${mode == 0})? 'Login' : 'Sign Up' "></h4>
 
-        <input type="text" name="username" class="form-control mb-2" placeholder="Username" >
+        <input type="text" name="username" class="form-control mb-2" placeholder="Username">
         <input type="password" name="password" class="form-control mb-2" placeholder="Password">
-        <input th:if="${mode == 1}" type="password" name="confirmPassword" class="form-control mb-2" placeholder="Confirm Password">
-        <input th:if="${mode == 1}" type="email" name="email" class="form-control mb-2" placeholder="Email">
+<!--        <input th:if="${mode == 1}" type="password" name="confirmPassword" class="form-control mb-2" placeholder="Confirm Password">-->
+<!--        <input th:if="${mode == 1}" type="email" name="email" class="form-control mb-2" placeholder="Email">-->
         <button class="btn btn-success" th:text="(${mode == 0})? 'Login' : 'Sign Up' "></button>
 
         <p class="text-danger mt-2" th:if="${param.error}">Invalid username or password</p>
-        <p class="text-success mt-2" th:if="${param.registered}">Registration successful, please login.</p>
+        <p class="text-danger mt-2" th:if="${signupError}" th:text="${signupError}"></p>
+<!--        <p class="text-success mt-2" th:if="${param.registered}">Registration successful, please login.</p>-->
     </form>
 
 
