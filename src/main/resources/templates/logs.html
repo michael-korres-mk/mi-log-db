@@ -21,9 +21,6 @@
 
     <h3 th:text="${queryTitle}"></h3>
 
-
-    <!--<th th:each="entry : ${#lists.seq(logs[0].entrySet())}" th:text="${entry.key}">Header</th>-->
-
     <form class="row g-3 align-items-end mb-3"
           th:if="${filters != null and !#lists.isEmpty(filters)}"
           th:action="@{/logs/{qid}(qid=${qid})}"

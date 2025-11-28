@@ -47,7 +47,6 @@ public class DataImportServiceImpl implements DataImportService {
 				Matcher m = p.matcher(line);
 				if (m.matches()) {
 					MiLog miLog = method.apply(m);
-					System.out.println(miLog);
 					logs.add(miLog);
 				}
 			}
@@ -149,7 +148,6 @@ public class DataImportServiceImpl implements DataImportService {
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd HHmmss");
 		LocalDateTime timestamp = LocalDateTime.parse(t, formatter);
-		System.out.println("timestamp = " + timestamp);
 
 		String replicate = m.group(3);
 		String updated = m.group(6);
