@@ -134,7 +134,7 @@ public class LogController {
 			}
 		}
 
-		return "redirect:/logs";
+		return "redirect:/logs/14";
 
 	}
 

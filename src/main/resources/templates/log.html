@@ -10,7 +10,7 @@
         <!-- include header from layout.html -->
         <div th:replace="~{layout :: siteHeader}"></div>
 
-        <form class="row g-3 align-items-end mb-3" th:href="@{/logs/persist/{id}(${log['id']})}" method="post">
+        <form class="row g-3 align-items-end mb-3" th:action="@{/logs/persist/{id}(id=${log['id']})}" method="post">
 
             <div class="row">
                 <div class="col-md-6 mb-3" th:each="col : ${columns}">
@@ -20,7 +20,7 @@
                     </label>
                 </div>
             </div>
-            <button type="submit">Run</button>
+            <button type="submit">Submit</button>
         </form>
     </div>
 
