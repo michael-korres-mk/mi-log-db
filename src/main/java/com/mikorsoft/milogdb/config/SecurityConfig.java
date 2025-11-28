@@ -18,8 +18,7 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService() {
         // TODO: after hard-coded user plug in DB users
         UserDetails user = User.withUsername("user")
-                .password("{noop}password")
-                .roles("USER")
+                .password("{noop}password") // {noop} is not part of the password. It is Spring Security's needed addition
                 .build();
 
         return new InMemoryUserDetailsManager(user);
