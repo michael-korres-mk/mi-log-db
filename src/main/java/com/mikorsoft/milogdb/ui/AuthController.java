@@ -26,7 +26,6 @@ public class AuthController {
 
 	@GetMapping("/")
 	public String auth(@RequestParam(required = false, defaultValue = "0") Integer mode, Model model) {
-		System.out.println("Selected mode: " + mode); // 0 or 1
 		model.addAttribute("mode", mode);
 		model.addAttribute("pageTitle", "MiLogDB");
 		model.addAttribute("headerTitle", "Welcome to MiLogDB");
@@ -37,9 +36,6 @@ public class AuthController {
 	@PostMapping("/signup")
 	public String login(@RequestParam String username, @RequestParam String password, Model model, HttpServletRequest request) {
 
-		System.out.println(username);
-		System.out.println(password);
-
 		int inserted = userRepository.insert(username, password);
 
 		if (inserted == 0) {
@@ -49,9 +45,6 @@ public class AuthController {
 			return "auth";
 		}
 		else{
-			// TODO: Clear these
-			username = "user";
-			password = "password";
 			UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
 			Authentication auth = authenticationManager.authenticate(authToken);
 

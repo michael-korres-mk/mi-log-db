@@ -6,10 +6,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -17,14 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        // TODO: after hard-coded user plug in DB users
-        UserDetails user = User.withUsername("user")
-                .password("{noop}password") // {noop} is not part of the password. It is Spring Security's needed addition
-                .build();
-
-        return new InMemoryUserDetailsManager(user);
-    }
+    PasswordEncoder passwordEncoder(){ return NoOpPasswordEncoder.getInstance(); }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
