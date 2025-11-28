@@ -25,8 +25,8 @@
     <form th:action="@{'/' + ${(mode == 0) ? 'login' : 'signup'}}" method="post" class="mt-4">
         <h4 th:text="(${mode == 0})? 'Login' : 'Sign Up' "></h4>
 
-        <input type="text" name="username" class="form-control mb-2" placeholder="Username">
-        <input type="password" name="password" class="form-control mb-2" placeholder="Password">
+        <input type="text" name="username" class="form-control mb-2" placeholder="Username" th:value="${param['username']} ?: ''">
+        <input type="password" name="password" class="form-control mb-2" placeholder="Password" th:value="${param['password']} ?: ''">
 <!--        <input th:if="${mode == 1}" type="password" name="confirmPassword" class="form-control mb-2" placeholder="Confirm Password">-->
 <!--        <input th:if="${mode == 1}" type="email" name="email" class="form-control mb-2" placeholder="Email">-->
         <button class="btn btn-success" th:text="(${mode == 0})? 'Login' : 'Sign Up' "></button>

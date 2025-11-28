@@ -13,7 +13,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Modifying
 	@Transactional
 	@Query(nativeQuery = true, value = """
-        INSERT INTO mi_log_db.users(password, username)
+        INSERT INTO mi_log_db.users(username,password)
         VALUES (:username, :password)
         ON CONFLICT (username) DO NOTHING
     """)
