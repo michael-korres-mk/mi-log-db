@@ -4,6 +4,8 @@ import com.mikorsoft.milogdb.domain.LogFile;
 import com.mikorsoft.milogdb.domain.LogType;
 import com.mikorsoft.milogdb.domain.MiLog;
 import com.mikorsoft.milogdb.repository.MiLogRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -25,7 +27,8 @@ import static com.mikorsoft.milogdb.domain.Regexes.IP_REGEX_RAW;
 public class DataImportServiceImpl implements DataImportService {
 
 	private final MiLogRepository miLogRepository;
-
+	private final EntityManager em;
+	@Transactional
 	public void importFile(LogFile log, String regex, Long n) throws IOException {
 
 		File file = new ClassPathResource(log.getFilename()).getFile();
@@ -42,15 +45,28 @@ public class DataImportServiceImpl implements DataImportService {
 		try (var is = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
 			String line;
 			List<MiLog> logs = new ArrayList<>();
-
+			int i = 1;
 			while ((n == null || n-- > 0) && (line = is.readLine()) != null) {
 				Matcher m = p.matcher(line);
 				if (m.matches()) {
 					MiLog miLog = method.apply(m);
 					logs.add(miLog);
 				}
+
+				if(i % 1000 == 0){
+					miLogRepository.saveAll(logs);
+					// help memory
+					em.flush();
+					em.clear();
+					logs = new ArrayList<>();
+				}
+
+				i++;
 			}
-			miLogRepository.saveAll(logs);
+
+			if (!logs.isEmpty()) {
+				miLogRepository.saveAll(logs);
+			}
 		}
 
 	}

@@ -16,7 +16,8 @@ public class MiLog {
 
 	// common
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mi_logs_seq")
+	@SequenceGenerator(name = "mi_logs_seq", sequenceName = "mi_logs_seq", allocationSize = 100)
 	private Long id;
 	private String IP;
 	private LocalDateTime timestamp;

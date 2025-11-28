@@ -4,7 +4,7 @@ spring:
         cache: false
         prefix: file:src/main/resources/templates/
     datasource:
-        url: jdbc:postgresql://localhost:5432/postgres
+        url: jdbc:postgresql://localhost:5432/postgres?reWriteBatchedInserts=true
         username: admin
         password: P@ssw0rd
         driver-class-name: org.postgresql.Driver
@@ -15,9 +15,12 @@ spring:
             format_sql: false
             default_schema: mi_log_db
             dialect: org.hibernate.dialect.PostgreSQLDialect
-
+            jdbc.batch_size: 100
+            order_inserts: true
+            order_updates: true
+            batch_versioned_data: true
         # Naming strategy
         hibernate:
             naming.implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyHbmImpl
             naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-#            ddl-auto: create
+            ddl-auto: create-drop
