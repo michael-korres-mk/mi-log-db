@@ -1,6 +1,5 @@
 package com.mikorsoft.milogdb.repository;
 
-import com.mikorsoft.milogdb.domain.LogType;
 import com.mikorsoft.milogdb.domain.MiLog;
 import com.mikorsoft.milogdb.model.QueryDTO;
 import jakarta.transaction.Transactional;
@@ -153,7 +152,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 		INSERT INTO mi_log_db.mi_logs (ip, timestamp, size, logType, remoteName,userID,httpMethod, httpStatus, resourceRequested, referrer, userAgent, destinationIPs, blockID)
 		VALUES (:ip, :timestamp, :size, :logType, :remoteName, :userID, :httpMethod, :httpStatus, :resourceRequested, :referrer, :userAgent, :destinationIPs, :blockID)
 	""")
-	int create(String ip, LocalDateTime timestamp, Long size, LogType logType, String remoteName, String userID, String httpMethod, Integer httpStatus, String resourceRequested, String referrer, String userAgent, String destinationIPs, Long blockID);
+	int create(String ip, LocalDateTime timestamp, Long size, String logType, String remoteName, String userID, String httpMethod, Integer httpStatus, String resourceRequested, String referrer, String userAgent, String destinationIPs, Long blockID);
 
 
 	@Modifying
@@ -175,6 +174,6 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 			blockID = :blockID
 		WHERE l.ID = :id
 	""")
-	int update(Long id, String ip, LocalDateTime timestamp, Long size, LogType logType, String remoteName, String userID, String httpMethod, Integer httpStatus, String resourceRequested, String referrer, String userAgent, String destinationIPs, Long blockID);
+	int update(Long id, String ip, LocalDateTime timestamp, Long size, String logType, String remoteName, String userID, String httpMethod, Integer httpStatus, String resourceRequested, String referrer, String userAgent, String destinationIPs, Long blockID);
 
 }

@@ -51,7 +51,7 @@ public class LogController {
 
 	@GetMapping
 	String query() {
-		return "logs";
+		return "redirect:/logs/14";
 	}
 
 	@GetMapping("/{qid}")
@@ -103,9 +103,9 @@ public class LogController {
 		if(id != 0){
 			QueryDTO log = miLogRepository.findByID(id).orElseThrow(() -> new RuntimeException("Log not found | id: " + id));
 			model.addAttribute("log", dtoToMap(log,MiLogColumn.miLogColumns()));
-			model.addAttribute("columns", MiLogColumn.miLogColumns());
-
 		}
+
+		model.addAttribute("columns", MiLogColumn.miLogColumns());
 
 		return "log";
 
@@ -113,11 +113,11 @@ public class LogController {
 
 	@PostMapping("/persist/{id}")
 	String persist(@PathVariable Long id,
-	             @RequestParam(required = false) String IP,
-	             @RequestParam(required = false) LogType logType,
+	             @RequestParam(required = false) String ip,
+	             @RequestParam(required = false) LogType logtype,
 	             @RequestParam(required = false) Long size,
 	             @RequestParam(required = false) String remoteName,
-	             @RequestParam(required = false) String userID,
+	             @RequestParam(required = false) String userId,
 	             @RequestParam(required = false) String httpMethod,
 	             @RequestParam(required = false) Integer httpStatus,
 	             @RequestParam(required = false) String resourceRequested,
@@ -128,9 +128,9 @@ public class LogController {
 
 		if(id != null) {
 			if (id == 0) {
-				miLogRepository.create(IP, LocalDateTime.now(), size, logType, remoteName, userID, httpMethod, httpStatus, resourceRequested, referrer, userAgent, destinationIPs, blockID);
+				miLogRepository.create(ip, LocalDateTime.now(), size, (logtype != null)? logtype.name():null, remoteName, userId, httpMethod, httpStatus, resourceRequested, referrer, userAgent, destinationIPs, blockID);
 			} else {
-				miLogRepository.update(id, IP, LocalDateTime.now(), size, logType, remoteName, userID, httpMethod, httpStatus, resourceRequested, referrer, userAgent, destinationIPs, blockID);
+				miLogRepository.update(id, ip, LocalDateTime.now(), size, (logtype != null)? logtype.name():null, remoteName, userId, httpMethod, httpStatus, resourceRequested, referrer, userAgent, destinationIPs, blockID);
 			}
 		}
 
