@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public interface QueryDTO {
+	Long getID();
 	Long getCount();
 	String getLogType();
 	LocalDate getDay();

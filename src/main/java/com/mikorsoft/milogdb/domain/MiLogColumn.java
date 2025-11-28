@@ -13,6 +13,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public enum MiLogColumn {
 
+	ID("id", "ID", "number", QueryDTO::getID),
 	DAY("day", "Day", "date", QueryDTO::getDay),
 	HOUR("hour", "Hour", "number", QueryDTO::getHour),
 	LOG_TYPE("logtype", "Log Type", "text", QueryDTO::getLogType),
@@ -44,7 +45,7 @@ public enum MiLogColumn {
 	}
 
 	public static List<MiLogColumn> miLogColumns() {
-		return List.of(IP, DESTINATION_IPS, TIMESTAMP, SIZE, LOG_TYPE, REMOTE_NAME, USER_ID, HTTP_METHOD, HTTP_STATUS, RESOURCE_REQUESTED, REFERRER, USER_AGENT);
+		return List.of(ID, IP, DESTINATION_IPS, TIMESTAMP, SIZE, LOG_TYPE, REMOTE_NAME, USER_ID, HTTP_METHOD, HTTP_STATUS, RESOURCE_REQUESTED, REFERRER, USER_AGENT);
 	}
 
 

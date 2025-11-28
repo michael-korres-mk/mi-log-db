@@ -1,14 +1,18 @@
 package com.mikorsoft.milogdb.repository;
 
+import com.mikorsoft.milogdb.domain.LogType;
 import com.mikorsoft.milogdb.domain.MiLog;
 import com.mikorsoft.milogdb.model.QueryDTO;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MiLogRepository extends JpaRepository<MiLog, Long> {
@@ -132,8 +136,45 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 	@Query(nativeQuery = true, value = """
 		SELECT *
 		FROM mi_log_db.mi_logs l
+		WHERE l.ID = :ID
+	""")
+	Optional<QueryDTO> findByID(Long ID);
+
+	@Query(nativeQuery = true, value = """
+		SELECT *
+		FROM mi_log_db.mi_logs l
 		WHERE (:IP = l.IP) OR (:IP = ANY (string_to_array(l.destinationips, ',')));
 	""")
 	List<QueryDTO> findByIP(String IP);
+
+	@Modifying
+	@Transactional
+	@Query(nativeQuery = true, value = """
+		INSERT INTO mi_log_db.mi_logs (ip, timestamp, size, logType, remoteName,userID,httpMethod, httpStatus, resourceRequested, referrer, userAgent, destinationIPs, blockID)
+		VALUES (:ip, :timestamp, :size, :logType, :remoteName, :userID, :httpMethod, :httpStatus, :resourceRequested, :referrer, :userAgent, :destinationIPs, :blockID)
+	""")
+	Long create(String ip, LocalDateTime timestamp, Long size, LogType logType, String remoteName, String userID, String httpMethod, Integer httpStatus, String resourceRequested, String referrer, String userAgent, String destinationIPs, Long blockID);
+
+
+	@Modifying
+	@Transactional
+	@Query(nativeQuery = true, value = """
+		UPDATE mi_log_db.mi_logs l
+	    SET IP = :ip,
+			timestamp = :timestamp,
+			size = :size,
+			logType = :logType,
+			remoteName = :remoteName,
+			userID=:userID,
+			httpMethod=:httpMethod,
+			httpStatus = :httpStatus,
+			resourceRequested = :resourceRequested,
+			referrer = :referrer,
+			userAgent = :userAgent,
+			destinationIPs = :destinationIPs,
+			blockID = :blockID
+		WHERE l.ID = :id
+	""")
+	Long update(Long id, String ip, LocalDateTime timestamp, Long size, LogType logType, String remoteName, String userID, String httpMethod, Integer httpStatus, String resourceRequested, String referrer, String userAgent, String destinationIPs, Long blockID);
 
 }

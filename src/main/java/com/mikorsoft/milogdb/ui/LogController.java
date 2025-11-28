@@ -3,13 +3,11 @@ package com.mikorsoft.milogdb.ui;
 import com.mikorsoft.milogdb.domain.LogType;
 import com.mikorsoft.milogdb.domain.MiLogColumn;
 import com.mikorsoft.milogdb.domain.MiLogFilter;
+import com.mikorsoft.milogdb.model.QueryDTO;
 import com.mikorsoft.milogdb.repository.MiLogRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -97,6 +95,46 @@ public class LogController {
 		model.addAttribute("params", params);
 
 		return "logs";
+
+	}
+
+	@GetMapping("/get/{id}")
+	String get(@PathVariable Long id, Model model){
+		if(id != 0){
+			QueryDTO log = miLogRepository.findByID(id).orElseThrow(() -> new RuntimeException("Log not found | id: " + id));
+			model.addAttribute("log", dtoToMap(log,MiLogColumn.miLogColumns()));
+			model.addAttribute("columns", MiLogColumn.miLogColumns());
+
+		}
+
+		return "log";
+
+	}
+
+	@PostMapping("/persist/{id}")
+	String persist(@PathVariable Long id,
+	             @RequestParam(required = false) String IP,
+	             @RequestParam(required = false) LogType logType,
+	             @RequestParam(required = false) Long size,
+	             @RequestParam(required = false) String remoteName,
+	             @RequestParam(required = false) String userID,
+	             @RequestParam(required = false) String httpMethod,
+	             @RequestParam(required = false) Integer httpStatus,
+	             @RequestParam(required = false) String resourceRequested,
+	             @RequestParam(required = false) String referrer,
+	             @RequestParam(required = false) String userAgent,
+	             @RequestParam(required = false) String destinationIPs,
+	             @RequestParam(required = false) Long blockID){
+
+		if(id != null) {
+			if (id == 0) {
+				miLogRepository.create(IP, LocalDateTime.now(), size, logType, remoteName, userID, httpMethod, httpStatus, resourceRequested, referrer, userAgent, destinationIPs, blockID);
+			} else {
+				miLogRepository.update(id, IP, LocalDateTime.now(), size, logType, remoteName, userID, httpMethod, httpStatus, resourceRequested, referrer, userAgent, destinationIPs, blockID);
+			}
+		}
+
+		return "redirect:/logs";
 
 	}
 

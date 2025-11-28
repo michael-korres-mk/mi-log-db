@@ -22,6 +22,7 @@
            th:href="@{/logs/14}"
            style="margin-right: 10px;"></a>
     </nav>
+    <hr/>
 
     <h3 th:text="${queryTitle}"></h3>
 
@@ -47,6 +48,8 @@
                 <thead>
                 <tr>
                     <th th:each="col : ${columns}" th:text="${col.title}"></th>
+                    <th th:if="${qid == 14}" th:text="''"></th>
+
                 </tr>
                 </thead>
 
@@ -65,6 +68,10 @@
 
                         </div>
                     </td>
+                    <th th:if="${qid == 14}">
+                        <a th:text="'Edit'" th:href="@{/logs/get/{id}(id=${row['id']})}" style="margin-right: 10px;"></a>
+                    </th>
+
                 </tr>
                 </tbody>
             </table>
