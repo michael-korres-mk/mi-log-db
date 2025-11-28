@@ -17,6 +17,10 @@
            th:text="${n}"
            th:href="@{/logs/{qid}(qid=${n})}"
            style="margin-right: 10px;"></a>
+        <a
+           th:text="'Search by IP'"
+           th:href="@{/logs/14}"
+           style="margin-right: 10px;"></a>
     </nav>
 
     <h3 th:text="${queryTitle}"></h3>
@@ -39,7 +43,7 @@
 
     <section th:if="${columns != null and !#lists.isEmpty(columns)}">
         <div class="table-responsive">
-            <table border="1" class="table table-striped table-hover table-bordered table-sm align-middle">
+            <table class="table table-striped table-hover table-bordered table-sm align-middle">
                 <thead>
                 <tr>
                     <th th:each="col : ${columns}" th:text="${col.title}"></th>
@@ -48,7 +52,19 @@
 
                 <tbody>
                 <tr th:each="row : ${logs}">
-                    <td th:each="col : ${columns}" th:text="${row[col.field]}"></td>
+                    <td th:each="col : ${columns}">
+                        <div th:switch="${col.uiType}">
+
+                            <div th:case="'list'" class="pill-container" th:with="rawVal=${row[col.field]}">
+                                <span class="badge pill text-bg-secondary mb-1"  th:each="val : ${#strings.listSplit(rawVal, ',')}" th:text="${#strings.trim(val)}"></span>
+                            </div>
+
+                            <div th:case="*">
+                                <span th:name="${col.field}" th:text="${row[col.field]}" />
+                            </div>
+
+                        </div>
+                    </td>
                 </tr>
                 </tbody>
             </table>

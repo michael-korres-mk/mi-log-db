@@ -1,5 +1,8 @@
 spring:
     application.name: mi-log-db
+    thymeleaf:
+        cache: false
+        prefix: file:src/main/resources/templates/
     datasource:
         url: jdbc:postgresql://localhost:5432/postgres
         username: admin

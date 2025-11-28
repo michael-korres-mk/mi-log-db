@@ -129,12 +129,11 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
     """)
 	List<QueryDTO> query13(LocalDateTime from, LocalDateTime to);
 
-
-//	@Query(nativeQuery = true, value = """
-//		SELECT *
-//		FROM log_entry
-//		WHERE IP = ANY (string_to_array(ips, ','));
-//	""")
-//	Optional<MiLog> findByDestinationIP(String IP);
+	@Query(nativeQuery = true, value = """
+		SELECT *
+		FROM mi_log_db.mi_logs l
+		WHERE (:IP = l.IP) OR (:IP = ANY (string_to_array(l.destinationips, ',')));
+	""")
+	List<QueryDTO> findByIP(String IP);
 
 }

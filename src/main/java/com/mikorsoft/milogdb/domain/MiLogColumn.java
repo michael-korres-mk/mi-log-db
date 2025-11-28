@@ -28,7 +28,7 @@ public enum MiLogColumn {
 	HTTP_METHOD("httpMethod", "HTTP Method", "text", QueryDTO::getHttpMethod),
 	HTTP_STATUS("httpStatus", "HTTP Status", "number", QueryDTO::getHttpStatus),
 	USER_AGENT("userAgent", "User Agent", "text", QueryDTO::getUserAgent),
-	DESTINATION_IPS("destinationIPs", "Destination IP(s)", "text", QueryDTO::getDestinationIPs),
+	DESTINATION_IPS("destinationIPs", "Destination IP(s)", "list", QueryDTO::getDestinationIPs),
 	;
 
 	private final String field;
@@ -44,7 +44,7 @@ public enum MiLogColumn {
 	}
 
 	public static List<MiLogColumn> miLogColumns() {
-		return List.of(IP, TIMESTAMP, SIZE, LOG_TYPE, REMOTE_NAME, USER_ID, HTTP_METHOD, HTTP_STATUS, RESOURCE_REQUESTED, REFERRER, USER_AGENT);
+		return List.of(IP, DESTINATION_IPS, TIMESTAMP, SIZE, LOG_TYPE, REMOTE_NAME, USER_ID, HTTP_METHOD, HTTP_STATUS, RESOURCE_REQUESTED, REFERRER, USER_AGENT);
 	}
 
 
