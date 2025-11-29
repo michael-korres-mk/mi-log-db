@@ -2,7 +2,10 @@ package com.mikorsoft.milogdb.ui;
 
 import com.mikorsoft.milogdb.domain.*;
 import com.mikorsoft.milogdb.model.QueryDTO;
+import com.mikorsoft.milogdb.model.UserLogDTO;
 import com.mikorsoft.milogdb.repository.MiLogRepository;
+import com.mikorsoft.milogdb.repository.UserLogRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +25,13 @@ import static com.mikorsoft.milogdb.domain.MiLogColumn.*;
 public class LogController {
 
 	private final MiLogRepository miLogRepository;
+	private final UserLogRepository userLogRepository;
 	private final Map<Integer, QueryUIComponent> queryUIComponents;
 
 
-	public LogController(MiLogRepository miLogRepository) {
+	public LogController(MiLogRepository miLogRepository, UserLogRepository userLogRepository) {
 		this.miLogRepository = miLogRepository;
+		this.userLogRepository = userLogRepository;
 
 		this.queryUIComponents = new HashMap<>();
 
@@ -164,4 +169,15 @@ public class LogController {
 
 	}
 
+	@GetMapping("/history")
+	String history(Model model, Authentication authentication){
+
+		List<UserLogDTO> logs = userLogRepository.findByUsername(authentication.getName());
+
+		model.addAttribute("logs", logs.stream().map(UserLogColumn::dtoToMap).toList());
+		model.addAttribute("columns", UserLogColumn.values());
+
+		return "history";
+
+	}
 }
