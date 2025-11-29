@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75f3234e-df13-45f1-946f-fe75b02c6f35" name="Changes" comment=" --- queries issued logging">
+    <list default="true" id="75f3234e-df13-45f1-946f-fe75b02c6f35" name="Changes" comment=" --- intelliJ config">
+      <change afterPath="$PROJECT_DIR$/schema.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mikorsoft/milogdb/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mikorsoft/milogdb/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/history.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/history.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/logs.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/logs.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mikorsoft/milogdb/controller/QueryController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,7 +29,7 @@
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
         <entry key="$PROJECT_DIR$/.." value="mi-queries" />
-        <entry key="$PROJECT_DIR$" value="mi-db-refactoring" />
+        <entry key="$PROJECT_DIR$" value="mi-user-logging" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -78,7 +79,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.MiLogDbApplication.executor": "Debug",
-    "git-widget-placeholder": "mi-user-logging",
+    "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/mkorres/IdeaProjects/mi-log-db/src/main/resources/templates",
     "node.js.detected.package.eslint": "true",
@@ -147,23 +148,7 @@
       <workItem from="1764073391723" duration="39000" />
       <workItem from="1764073442005" duration="44000" />
       <workItem from="1764315785456" duration="975000" />
-      <workItem from="1764317251890" duration="62803000" />
-    </task>
-    <task id="LOCAL-00014" summary="--- log object creation">
-      <option name="closed" value="true" />
-      <created>1764023511562</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1764023511562</updated>
-    </task>
-    <task id="LOCAL-00015" summary="--- data import succeeded">
-      <option name="closed" value="true" />
-      <created>1764024761591</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1764024761592</updated>
+      <workItem from="1764317251890" duration="65464000" />
     </task>
     <task id="LOCAL-00016" summary="--- query 1 done">
       <option name="closed" value="true" />
@@ -541,7 +526,23 @@
       <option name="project" value="LOCAL" />
       <updated>1764437005279</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary=" --- run history query">
+      <option name="closed" value="true" />
+      <created>1764437411159</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1764437411159</updated>
+    </task>
+    <task id="LOCAL-00064" summary=" --- intelliJ config">
+      <option name="closed" value="true" />
+      <created>1764437446307</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1764437446307</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -562,8 +563,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="--- user creation --- unique username constraint &amp; validation" />
-    <MESSAGE value="--- username/password fields state --- flipped fields in query (fix)" />
     <MESSAGE value="--- logout link --- thymeleaf-extras-springsecurity6" />
     <MESSAGE value="--- auto-login after signup" />
     <MESSAGE value="--- db user authentication" />
@@ -587,7 +586,9 @@
     <MESSAGE value=" --- user query history setup" />
     <MESSAGE value=" --- user query history logging setup" />
     <MESSAGE value=" --- queries issued logging" />
-    <option name="LAST_COMMIT_MESSAGE" value=" --- queries issued logging" />
+    <MESSAGE value=" --- run history query" />
+    <MESSAGE value=" --- intelliJ config" />
+    <option name="LAST_COMMIT_MESSAGE" value=" --- intelliJ config" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
