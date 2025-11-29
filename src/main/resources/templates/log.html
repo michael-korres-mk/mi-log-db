@@ -16,7 +16,7 @@
                 <div class="col-md-6 mb-3" th:each="col : ${columns}">
                     <label>
                         <span th:text="${col.title}"></span>
-                        <input th:type="${col.uiType}" th:name="${col.field}" th:value="${log != null ? log.id : ''}" th:disabled="${col.field == 'id'}" />
+                        <input th:type="${col.uiType}" th:name="${col.field}" th:value="${log != null ? log[col.field] : ''}" th:disabled="${col.field == 'id'}" />
                     </label>
                 </div>
             </div>
