@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75f3234e-df13-45f1-946f-fe75b02c6f35" name="Changes" comment="--- changed Long into LocalDate for days" />
+    <list default="true" id="75f3234e-df13-45f1-946f-fe75b02c6f35" name="Changes" comment=" --- queries issued logging">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mikorsoft/milogdb/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mikorsoft/milogdb/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/history.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/history.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/logs.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/logs.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -23,9 +28,10 @@
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
         <entry key="$PROJECT_DIR$/.." value="mi-queries" />
+        <entry key="$PROJECT_DIR$" value="mi-db-refactoring" />
       </map>
     </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RESET_MODE" value="MIXED" />
   </component>
   <component name="JpbToolWindowState">
@@ -72,9 +78,9 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.MiLogDbApplication.executor": "Debug",
-    "git-widget-placeholder": "mi-user-management",
+    "git-widget-placeholder": "mi-user-logging",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/mkorres/IdeaProjects/examination-tranfer-service",
+    "last_opened_file_path": "C:/Users/mkorres/IdeaProjects/mi-log-db/src/main/resources/templates",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -96,13 +102,19 @@
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.mikorsoft.milogdb.controller" />
     </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\mkorres\IdeaProjects\mi-log-db\src\main\resources\templates" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\mkorres\IdeaProjects\mi-log-db\src\main\resources" />
       <recent name="C:\Users\mkorres\IdeaProjects\mi-log-db\src\main\resources\data" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.mikorsoft.milogdb.model" />
-      <recent name="com.mikorsoft.milogdb" />
+      <recent name="com.mikorsoft.milogdb.domain" />
+      <recent name="com.mikorsoft.milogdb.service" />
+      <recent name="com.mikorsoft.milogdb.repository" />
+      <recent name="com.mikorsoft.milogdb.ui" />
     </key>
   </component>
   <component name="RunManager">
@@ -134,110 +146,8 @@
       <workItem from="1764058664737" duration="13998000" />
       <workItem from="1764073391723" duration="39000" />
       <workItem from="1764073442005" duration="44000" />
-    </task>
-    <task id="LOCAL-00001" summary="--- first commit">
-      <option name="closed" value="true" />
-      <created>1763072035714</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1763072035714</updated>
-    </task>
-    <task id="LOCAL-00002" summary="--- access log regex initial definition">
-      <option name="closed" value="true" />
-      <created>1763076001943</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1763076001943</updated>
-    </task>
-    <task id="LOCAL-00003" summary="--- IP regex">
-      <option name="closed" value="true" />
-      <created>1763625520945</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1763625520945</updated>
-    </task>
-    <task id="LOCAL-00004" summary="--- timestamp regex &amp; formatting">
-      <option name="closed" value="true" />
-      <created>1763626504010</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1763626504010</updated>
-    </task>
-    <task id="LOCAL-00005" summary="--- remoteName &amp; userID regex">
-      <option name="closed" value="true" />
-      <created>1763626991976</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1763626991976</updated>
-    </task>
-    <task id="LOCAL-00006" summary="--- httpMethod regex">
-      <option name="closed" value="true" />
-      <created>1763627523298</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1763627523298</updated>
-    </task>
-    <task id="LOCAL-00007" summary="--- httpResponseStatus &amp; responseSize regexes">
-      <option name="closed" value="true" />
-      <created>1763627978481</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1763627978481</updated>
-    </task>
-    <task id="LOCAL-00008" summary="--- referrer &amp; userAgent regexes">
-      <option name="closed" value="true" />
-      <created>1763629653054</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1763629653054</updated>
-    </task>
-    <task id="LOCAL-00009" summary="--- start &amp; end anchors for the regex">
-      <option name="closed" value="true" />
-      <created>1763629890257</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1763629890257</updated>
-    </task>
-    <task id="LOCAL-00010" summary="--- more robust regex construction">
-      <option name="closed" value="true" />
-      <created>1763630614712</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1763630614712</updated>
-    </task>
-    <task id="LOCAL-00011" summary="--- HDFS_FS_Namesystem.log regexes">
-      <option name="closed" value="true" />
-      <created>1763644727089</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1763644727090</updated>
-    </task>
-    <task id="LOCAL-00012" summary="--- HDFS_FS_Namesystem.log regexes for both types of logs">
-      <option name="closed" value="true" />
-      <created>1763741165582</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1763741165582</updated>
-    </task>
-    <task id="LOCAL-00013" summary="--- HDFS_DataXceiver.log regexes">
-      <option name="closed" value="true" />
-      <created>1764014848708</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1764014848708</updated>
+      <workItem from="1764315785456" duration="975000" />
+      <workItem from="1764317251890" duration="62803000" />
     </task>
     <task id="LOCAL-00014" summary="--- log object creation">
       <option name="closed" value="true" />
@@ -407,7 +317,231 @@
       <option name="project" value="LOCAL" />
       <updated>1764072977634</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="--- authentication page setup">
+      <option name="closed" value="true" />
+      <created>1764323586926</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1764323586926</updated>
+    </task>
+    <task id="LOCAL-00036" summary="--- spring security session-based auth setup">
+      <option name="closed" value="true" />
+      <created>1764329299482</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1764329299482</updated>
+    </task>
+    <task id="LOCAL-00037" summary="--- form URL fix">
+      <option name="closed" value="true" />
+      <created>1764331575256</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1764331575256</updated>
+    </task>
+    <task id="LOCAL-00038" summary="--- principal name rendering --- AuthController cleanup">
+      <option name="closed" value="true" />
+      <created>1764332754381</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1764332754381</updated>
+    </task>
+    <task id="LOCAL-00039" summary="--- user creation --- unique username constraint &amp; validation">
+      <option name="closed" value="true" />
+      <created>1764336662764</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1764336662765</updated>
+    </task>
+    <task id="LOCAL-00040" summary="--- username/password fields state --- flipped fields in query (fix)">
+      <option name="closed" value="true" />
+      <created>1764337930386</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1764337930386</updated>
+    </task>
+    <task id="LOCAL-00041" summary="--- logout link --- thymeleaf-extras-springsecurity6">
+      <option name="closed" value="true" />
+      <created>1764341216512</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1764341216512</updated>
+    </task>
+    <task id="LOCAL-00042" summary="--- auto-login after signup">
+      <option name="closed" value="true" />
+      <created>1764342821044</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1764342821044</updated>
+    </task>
+    <task id="LOCAL-00043" summary="--- db user authentication">
+      <option name="closed" value="true" />
+      <created>1764351543860</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1764351543860</updated>
+    </task>
+    <task id="LOCAL-00044" summary="--- search by IP">
+      <option name="closed" value="true" />
+      <created>1764353209926</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1764353209926</updated>
+    </task>
+    <task id="LOCAL-00045" summary="--- render destination IPs as pills">
+      <option name="closed" value="true" />
+      <created>1764363763632</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1764363763632</updated>
+    </task>
+    <task id="LOCAL-00046" summary=" --- load html directly from disk">
+      <option name="closed" value="true" />
+      <created>1764363781738</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1764363781738</updated>
+    </task>
+    <task id="LOCAL-00047" summary=" --- edit log page --- create &amp; update methods">
+      <option name="closed" value="true" />
+      <created>1764370644908</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1764370644908</updated>
+    </task>
+    <task id="LOCAL-00048" summary=" --- log update done">
+      <option name="closed" value="true" />
+      <created>1764371100566</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1764371100566</updated>
+    </task>
+    <task id="LOCAL-00049" summary=" --- param fixes">
+      <option name="closed" value="true" />
+      <created>1764371858712</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1764371858712</updated>
+    </task>
+    <task id="LOCAL-00050" summary=" --- log insert done">
+      <option name="closed" value="true" />
+      <created>1764372955905</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1764372955907</updated>
+    </task>
+    <task id="LOCAL-00051" summary=" --- batching &amp; sequences for ID generation">
+      <option name="closed" value="true" />
+      <created>1764374083616</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1764374083616</updated>
+    </task>
+    <task id="LOCAL-00052" summary=" --- data import timer">
+      <option name="closed" value="true" />
+      <created>1764421704182</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1764421704183</updated>
+    </task>
+    <task id="LOCAL-00053" summary=" --- only access logs for query 7">
+      <option name="closed" value="true" />
+      <created>1764421886978</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1764421886978</updated>
+    </task>
+    <task id="LOCAL-00054" summary=" --- fixed HDFS_DATA_XCEIVER_LOG_REGEX">
+      <option name="closed" value="true" />
+      <created>1764425534586</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1764425534586</updated>
+    </task>
+    <task id="LOCAL-00055" summary=" --- DB normalization">
+      <option name="closed" value="true" />
+      <created>1764425949145</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1764425949145</updated>
+    </task>
+    <task id="LOCAL-00056" summary=" --- query 3 ui fix">
+      <option name="closed" value="true" />
+      <created>1764426061819</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1764426061819</updated>
+    </task>
+    <task id="LOCAL-00057" summary=" --- repository queries refactored">
+      <option name="closed" value="true" />
+      <created>1764428690774</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1764428690774</updated>
+    </task>
+    <task id="LOCAL-00058" summary=" --- ui log fields fix">
+      <option name="closed" value="true" />
+      <created>1764428777701</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1764428777701</updated>
+    </task>
+    <task id="LOCAL-00059" summary=" --- create/update using JPA methods">
+      <option name="closed" value="true" />
+      <created>1764431063919</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1764431063920</updated>
+    </task>
+    <task id="LOCAL-00060" summary=" --- indexes">
+      <option name="closed" value="true" />
+      <created>1764432271536</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1764432271536</updated>
+    </task>
+    <task id="LOCAL-00061" summary=" --- user query history logging setup">
+      <option name="closed" value="true" />
+      <created>1764436383894</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1764436383894</updated>
+    </task>
+    <task id="LOCAL-00062" summary=" --- queries issued logging">
+      <option name="closed" value="true" />
+      <created>1764437005279</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1764437005279</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -428,32 +562,32 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="--- start &amp; end anchors for the regex" />
-    <MESSAGE value="--- more robust regex construction" />
-    <MESSAGE value="--- HDFS_FS_Namesystem.log regexes" />
-    <MESSAGE value="--- HDFS_FS_Namesystem.log regexes for both types of logs" />
-    <MESSAGE value="--- HDFS_DataXceiver.log regexes" />
-    <MESSAGE value="--- log object creation" />
-    <MESSAGE value="--- data import succeeded" />
-    <MESSAGE value="--- query 1 done" />
-    <MESSAGE value="--- query 2 done" />
-    <MESSAGE value="--- query 3 done" />
-    <MESSAGE value="--- query 4 done" />
-    <MESSAGE value="--- added resourceRequested in parsing logic" />
-    <MESSAGE value="--- query 5 done" />
-    <MESSAGE value="--- query 5 optimized" />
-    <MESSAGE value="--- query 6 done" />
-    <MESSAGE value="--- query 7 done" />
-    <MESSAGE value="--- regex fix" />
-    <MESSAGE value="--- query 8 done" />
-    <MESSAGE value="--- query 9 done" />
-    <MESSAGE value="--- requested resource regex fix" />
-    <MESSAGE value="--- bring limit to /data-import endpoint" />
-    <MESSAGE value="--- query 10 done" />
-    <MESSAGE value="--- queries 11,12,13 done" />
-    <MESSAGE value="--- cleared ZonedDateTime &amp; related formatting code" />
-    <MESSAGE value="--- changed Long into LocalDate for days" />
-    <option name="LAST_COMMIT_MESSAGE" value="--- changed Long into LocalDate for days" />
+    <MESSAGE value="--- user creation --- unique username constraint &amp; validation" />
+    <MESSAGE value="--- username/password fields state --- flipped fields in query (fix)" />
+    <MESSAGE value="--- logout link --- thymeleaf-extras-springsecurity6" />
+    <MESSAGE value="--- auto-login after signup" />
+    <MESSAGE value="--- db user authentication" />
+    <MESSAGE value="--- search by IP" />
+    <MESSAGE value="--- render destination IPs as pills" />
+    <MESSAGE value=" --- load html directly from disk" />
+    <MESSAGE value=" --- edit log page --- create &amp; update methods" />
+    <MESSAGE value=" --- log update done" />
+    <MESSAGE value=" --- param fixes" />
+    <MESSAGE value=" --- log insert done" />
+    <MESSAGE value=" --- batching &amp; sequences for ID generation" />
+    <MESSAGE value=" --- data import timer" />
+    <MESSAGE value=" --- only access logs for query 7" />
+    <MESSAGE value=" --- fixed HDFS_DATA_XCEIVER_LOG_REGEX" />
+    <MESSAGE value=" --- DB normalization" />
+    <MESSAGE value=" --- query 3 ui fix" />
+    <MESSAGE value=" --- repository queries refactored" />
+    <MESSAGE value=" --- ui log fields fix" />
+    <MESSAGE value=" --- create/update using JPA methods" />
+    <MESSAGE value=" --- indexes" />
+    <MESSAGE value=" --- user query history setup" />
+    <MESSAGE value=" --- user query history logging setup" />
+    <MESSAGE value=" --- queries issued logging" />
+    <option name="LAST_COMMIT_MESSAGE" value=" --- queries issued logging" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
