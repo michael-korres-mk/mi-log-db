@@ -27,19 +27,12 @@ public class MiLog {
 	@Enumerated(value = EnumType.STRING)
 	private LogType logType;
 
-	// TODO: bring "details" to different relation
-	// access
-	private String remoteName;
-	private String userID;
-	private String httpMethod;
-	private Integer httpStatus;
-	private String resourceRequested;
-	private String referrer;
-	private String userAgent;
+	@OneToOne(mappedBy = "miLog", cascade = CascadeType.ALL, orphanRemoval = true)
+	private AccessLogDetails accessLogDetails;
 
-	// HDFS_DataXceiver | HDFS_FS_Namesystem
-	private String destinationIPs;
-	private Long blockID;
+	@OneToOne(mappedBy = "miLog", cascade = CascadeType.ALL, orphanRemoval = true)
+	private HdfsLogDetails hdfsLogDetails;
+
 
 	@Override
 	public String toString() {
@@ -49,15 +42,6 @@ public class MiLog {
 				", timestamp=" + timestamp +
 				", size=" + size +
 				", logType=" + logType +
-				", remoteName=" + remoteName +
-				", userID=" + userID +
-				", httpMethod=" + httpMethod +
-				", httpStatus=" + httpStatus +
-				", resourceRequested=" + resourceRequested +
-				", referrer=" + referrer +
-				", userAgent=" + userAgent +
-				", destinationIPs=" + destinationIPs +
-				", blockID=" + blockID +
 				'}';
 	}
 }

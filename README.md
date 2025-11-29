@@ -2,7 +2,7 @@
 #### _Michael Korres - Department of Informatics & Telecommunications - University of Athens_
 
 ## Data Import
-Some numbers:
+Some numbers: (before DB normalization)
 
 | Batch Size | Time (s) | Time (min) |
 |------------|----------|-------------|

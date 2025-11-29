@@ -1,8 +1,6 @@
 package com.mikorsoft.milogdb.service;
 
-import com.mikorsoft.milogdb.domain.LogFile;
-import com.mikorsoft.milogdb.domain.LogType;
-import com.mikorsoft.milogdb.domain.MiLog;
+import com.mikorsoft.milogdb.domain.*;
 import com.mikorsoft.milogdb.repository.MiLogRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -91,12 +89,15 @@ public class DataImportServiceImpl implements DataImportService {
 		String referrer = m.group(9);
 		String userAgent = m.group(10);
 
-		return MiLog
+		MiLog log = MiLog
 				.builder()
 				.IP(IP)
 				.timestamp(timestamp)
 				.size(size)
 				.logType(LogType.ACCESS)
+				.build();
+
+		AccessLogDetails details = AccessLogDetails.builder()
 				.remoteName(remoteName)
 				.userID(userID)
 				.resourceRequested(resourceRequested)
@@ -106,6 +107,10 @@ public class DataImportServiceImpl implements DataImportService {
 				.userAgent(userAgent)
 				.build();
 
+		log.setAccessLogDetails(details);
+		details.setMiLog(log);
+
+		return log;
 	}
 
 	private MiLog createHdfsDataXceiverLogRecord(Matcher m) {
@@ -126,33 +131,57 @@ public class DataImportServiceImpl implements DataImportService {
 
 		MiLog.MiLogBuilder miLogBuilder = MiLog
 				.builder()
-				.timestamp(timestamp)
-				.blockID(blockID);
+				.timestamp(timestamp);
 
 		if (logType == null) {
 			throw new RuntimeException("Invalid HDFS FS Namesystem Log !!!");
 		} else if (logType.equals("Receiving")) {
 
-			return miLogBuilder
+			MiLog log = miLogBuilder
 					.IP(srcOrDestIP)
 					.logType(LogType.RECEIVING)
-					.destinationIPs(destIP)
 					.build();
 
+			HdfsLogDetails details = HdfsLogDetails.builder()
+					.destinationIPs(destIP)
+					.blockID(blockID)
+					.build();
+
+			log.setHdfsLogDetails(details);
+			details.setMiLog(log);
+			return log;
+
 		} else if (logType.equals("Received")) {
-			return miLogBuilder
+			MiLog log = miLogBuilder
 					.IP(srcOrDestIP)
 					.logType(LogType.RECEIVED)
-					.destinationIPs(destIP)
 					.size(size)
 					.build();
+
+			HdfsLogDetails details = HdfsLogDetails.builder()
+					.destinationIPs(destIP)
+					.blockID(blockID)
+					.build();
+
+			log.setHdfsLogDetails(details);
+			details.setMiLog(log);
+			return log;
+
 		} else if (logType.matches(IP_REGEX_RAW)) {
-			return miLogBuilder
+			MiLog log = miLogBuilder
 					.IP(logType)
 					.logType(LogType.SERVED)
-					.destinationIPs(srcOrDestIP)
 					.size(size)
 					.build();
+
+			HdfsLogDetails details = HdfsLogDetails.builder()
+					.destinationIPs(srcOrDestIP)
+					.blockID(blockID)
+					.build();
+
+			log.setHdfsLogDetails(details);
+			details.setMiLog(log);
+			return log;
 		}
 
 		throw new RuntimeException("Invalid HDFS FS Namesystem Log !!!");
@@ -160,7 +189,6 @@ public class DataImportServiceImpl implements DataImportService {
 	}
 
 	private MiLog createHdfsFSNamesystemLogRecord(Matcher m) {
-
 
 		String t = m.group(1);
 
@@ -175,28 +203,43 @@ public class DataImportServiceImpl implements DataImportService {
 			long blockID = Long.parseLong(m.group(4));
 			List<String> IPs = List.of(m.group(5).split(" "));
 
-			return MiLog
+			MiLog log = MiLog
 					.builder()
 					.timestamp(timestamp)
 					.logType(LogType.REPLICATE)
 					.IP(sourceIP)
+					.build();
+
+			HdfsLogDetails details = HdfsLogDetails.builder()
 					.blockID(blockID)
 					.destinationIPs(String.join(",", IPs))
 					.build();
+
+			log.setHdfsLogDetails(details);
+			details.setMiLog(log);
+			return log;
 
 		} else if (updated != null) {
 			String sourceIP = m.group(7);
 			long blockID = Long.parseLong(m.group(8));
 			long size = Long.parseLong(m.group(9));
 
-			return MiLog
+			MiLog log = MiLog
 					.builder()
 					.timestamp(timestamp)
 					.logType(LogType.UPDATED)
 					.IP(sourceIP)
-					.blockID(blockID)
 					.size(size)
 					.build();
+
+			HdfsLogDetails details = HdfsLogDetails
+					.builder()
+					.blockID(blockID)
+					.build();
+
+			log.setHdfsLogDetails(details);
+			details.setMiLog(log);
+			return log;
 
 		} else {
 			throw new RuntimeException("Invalid HDFS FS Namesystem Log !!!");
