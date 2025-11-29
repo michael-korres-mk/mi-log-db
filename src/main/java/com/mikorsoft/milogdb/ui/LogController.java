@@ -45,7 +45,7 @@ public class LogController {
 		queryUIComponents.put(11, new QueryUIComponent(11L, "11. Find IPs that have issued a particular HTTP method on a particular time range.", List.of(IP, COUNT),Stream.concat(MiLogFilter.timerange().stream(),Stream.of(MiLogFilter.HTTP_METHOD)).toList()));
 		queryUIComponents.put(12, new QueryUIComponent(12L, "12. Find IPs that have issued two particular HTTP methods on a particular time range.", List.of(IP, COUNT), Stream.concat(MiLogFilter.timerange().stream(),Stream.of(MiLogFilter.HTTP_METHODS)).toList()));
 		queryUIComponents.put(13, new QueryUIComponent(13L, "13. Find IPs that have issued any four distinct HTTP methods on a particular time range.", List.of(IP, COUNT),Stream.concat(MiLogFilter.timerange().stream(),Stream.of(MiLogFilter.HTTP_METHODS)).toList()));
-		queryUIComponents.put(14, new QueryUIComponent(14L, "Search by IP", MiLogColumn.miLogColumns(),List.of(MiLogFilter.IP)));
+		queryUIComponents.put(14, new QueryUIComponent(14L, "Search by IP",Stream.concat(MiLogColumn.miLogColumns().stream(),Stream.of(DESTINATION_IPS, BLOCK_ID)).toList(),List.of(MiLogFilter.IP)));
 	}
 
 	@GetMapping
@@ -125,13 +125,13 @@ public class LogController {
 	             @RequestParam(required = false) String destinationIPs,
 	             @RequestParam(required = false) Long blockID){
 
-		if(id != null) {
-			if (id == 0) {
-				miLogRepository.create(ip, LocalDateTime.now(), size, (logtype != null)? logtype.name():null, remoteName, userId, httpMethod, httpStatus, resourceRequested, referrer, userAgent, destinationIPs, blockID);
-			} else {
-				miLogRepository.update(id, ip, LocalDateTime.now(), size, (logtype != null)? logtype.name():null, remoteName, userId, httpMethod, httpStatus, resourceRequested, referrer, userAgent, destinationIPs, blockID);
-			}
-		}
+//		if(id != null) {
+//			if (id == 0) {
+//				miLogRepository.create(ip, LocalDateTime.now(), size, (logtype != null)? logtype.name():null, remoteName, userId, httpMethod, httpStatus, resourceRequested, referrer, userAgent, destinationIPs, blockID);
+//			} else {
+//				miLogRepository.update(id, ip, LocalDateTime.now(), size, (logtype != null)? logtype.name():null, remoteName, userId, httpMethod, httpStatus, resourceRequested, referrer, userAgent, destinationIPs, blockID);
+//			}
+//		}
 
 		return "redirect:/logs/14";
 
