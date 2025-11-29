@@ -1,8 +1,6 @@
 package com.mikorsoft.milogdb.ui;
 
-import com.mikorsoft.milogdb.domain.LogType;
-import com.mikorsoft.milogdb.domain.MiLogColumn;
-import com.mikorsoft.milogdb.domain.MiLogFilter;
+import com.mikorsoft.milogdb.domain.*;
 import com.mikorsoft.milogdb.model.QueryDTO;
 import com.mikorsoft.milogdb.repository.MiLogRepository;
 import org.springframework.stereotype.Controller;
@@ -104,7 +102,7 @@ public class LogController {
 			model.addAttribute("log", dtoToMap(log,MiLogColumn.miLogColumns()));
 		}
 
-		model.addAttribute("columns", MiLogColumn.miLogColumns());
+		model.addAttribute("columns", Stream.concat(MiLogColumn.miLogColumns().stream(),Stream.of(DESTINATION_IPS, BLOCK_ID)).toList());
 
 		return "log";
 
@@ -123,15 +121,44 @@ public class LogController {
 	             @RequestParam(required = false) String referrer,
 	             @RequestParam(required = false) String userAgent,
 	             @RequestParam(required = false) String destinationIPs,
-	             @RequestParam(required = false) Long blockID){
+	             @RequestParam(required = false) Long blockId){
 
-//		if(id != null) {
-//			if (id == 0) {
-//				miLogRepository.create(ip, LocalDateTime.now(), size, (logtype != null)? logtype.name():null, remoteName, userId, httpMethod, httpStatus, resourceRequested, referrer, userAgent, destinationIPs, blockID);
-//			} else {
-//				miLogRepository.update(id, ip, LocalDateTime.now(), size, (logtype != null)? logtype.name():null, remoteName, userId, httpMethod, httpStatus, resourceRequested, referrer, userAgent, destinationIPs, blockID);
-//			}
-//		}
+		if(id != null) {
+			MiLog log = MiLog.builder()
+					.id((id != 0)? id : null)
+					.IP(ip)
+					.timestamp(LocalDateTime.now())
+					.size(size)
+					.logType(logtype)
+					.build();
+
+			if(logtype == LogType.ACCESS) {
+				AccessLogDetails details = AccessLogDetails.builder()
+						.id((id != 0) ? id : null)
+						.remoteName(remoteName)
+						.userID(userId)
+						.httpMethod(httpMethod)
+						.httpStatus(httpStatus)
+						.resourceRequested(resourceRequested)
+						.referrer(referrer)
+						.userAgent(userAgent)
+						.build();
+
+				details.setMiLog(log);
+				log.setAccessLogDetails(details);
+			}
+			else{
+				HdfsLogDetails details = HdfsLogDetails.builder()
+						.destinationIPs(destinationIPs)
+						.blockID(blockId)
+						.build();
+
+				log.setHdfsLogDetails(details);
+				details.setMiLog(log);
+			}
+
+			miLogRepository.save(log);
+		}
 
 		return "redirect:/logs/14";
 
