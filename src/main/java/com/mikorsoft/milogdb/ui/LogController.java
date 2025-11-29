@@ -1,8 +1,6 @@
 package com.mikorsoft.milogdb.ui;
 
-import com.mikorsoft.milogdb.domain.LogType;
-import com.mikorsoft.milogdb.domain.MiLogColumn;
-import com.mikorsoft.milogdb.domain.MiLogFilter;
+import com.mikorsoft.milogdb.domain.*;
 import com.mikorsoft.milogdb.model.QueryDTO;
 import com.mikorsoft.milogdb.repository.MiLogRepository;
 import org.springframework.stereotype.Controller;
@@ -34,11 +32,10 @@ public class LogController {
 
 		queryUIComponents.put(1, new QueryUIComponent(1L, "1. Find the total logs per type that were created within a specified time range and sort them in a descending order.", List.of(MiLogColumn.LOG_TYPE, COUNT),MiLogFilter.timerange()));
 		queryUIComponents.put(2, new QueryUIComponent(2L, "2. Find the total logs per day for a specific action type and time range.", List.of(MiLogColumn.DAY, COUNT),Stream.concat(MiLogFilter.timerange().stream(),Stream.of(MiLogFilter.LOG_TYPE)).toList()));
-		queryUIComponents.put(3, new QueryUIComponent(3L, "3. Find the most common log per source IP for a specific day.", List.of(MiLogColumn.DAY, COUNT),List.of(MiLogFilter.DAY)));
+		queryUIComponents.put(3, new QueryUIComponent(3L, "3. Find the most common log per source IP for a specific day.", List.of(MiLogColumn.IP, COUNT),List.of(MiLogFilter.DAY)));
 		queryUIComponents.put(4, new QueryUIComponent(4L, "4. Find the top-5 Block IDs with regards to total number of actions per day for a specific date range (for types that Block ID is available)", List.of(BLOCK_ID, MiLogColumn.DAY, COUNT),MiLogFilter.timerange()));
 		queryUIComponents.put(5, new QueryUIComponent(5L, "5. Find the referrers (if any) that have led to more than one resources.", List.of(REFERRER, COUNT),MiLogFilter.none()));
 		queryUIComponents.put(6, new QueryUIComponent(6L, "6. Find the 2nd–most–common resource requested.", List.of(RESOURCE_REQUESTED, COUNT),MiLogFilter.none()));
-		// TODO: Only access logs
 		queryUIComponents.put(7, new QueryUIComponent(7L, "7. Find the access log (all fields) where the size is less than a specified number.", MiLogColumn.miLogColumns(),List.of(MiLogFilter.SIZE)));
 		queryUIComponents.put(8, new QueryUIComponent(8L, "8. Find the blocks that have been replicated the same day that they have also been served.", List.of(BLOCK_ID, MiLogColumn.DAY),MiLogFilter.none()));
 		queryUIComponents.put(9, new QueryUIComponent(9L, "9. Find the blocks that have been replicated the same day and hour that they have also been served.", List.of(BLOCK_ID, MiLogColumn.DAY, HOUR),MiLogFilter.none()));
@@ -46,7 +43,7 @@ public class LogController {
 		queryUIComponents.put(11, new QueryUIComponent(11L, "11. Find IPs that have issued a particular HTTP method on a particular time range.", List.of(IP, COUNT),Stream.concat(MiLogFilter.timerange().stream(),Stream.of(MiLogFilter.HTTP_METHOD)).toList()));
 		queryUIComponents.put(12, new QueryUIComponent(12L, "12. Find IPs that have issued two particular HTTP methods on a particular time range.", List.of(IP, COUNT), Stream.concat(MiLogFilter.timerange().stream(),Stream.of(MiLogFilter.HTTP_METHODS)).toList()));
 		queryUIComponents.put(13, new QueryUIComponent(13L, "13. Find IPs that have issued any four distinct HTTP methods on a particular time range.", List.of(IP, COUNT),Stream.concat(MiLogFilter.timerange().stream(),Stream.of(MiLogFilter.HTTP_METHODS)).toList()));
-		queryUIComponents.put(14, new QueryUIComponent(14L, "Search by IP", MiLogColumn.miLogColumns(),List.of(MiLogFilter.IP)));
+		queryUIComponents.put(14, new QueryUIComponent(14L, "Search by IP",Stream.concat(MiLogColumn.miLogColumns().stream(),Stream.of(DESTINATION_IPS, BLOCK_ID)).toList(),List.of(MiLogFilter.IP)));
 	}
 
 	@GetMapping
@@ -105,7 +102,7 @@ public class LogController {
 			model.addAttribute("log", dtoToMap(log,MiLogColumn.miLogColumns()));
 		}
 
-		model.addAttribute("columns", MiLogColumn.miLogColumns());
+		model.addAttribute("columns", Stream.concat(MiLogColumn.miLogColumns().stream(),Stream.of(DESTINATION_IPS, BLOCK_ID)).toList());
 
 		return "log";
 
@@ -124,14 +121,43 @@ public class LogController {
 	             @RequestParam(required = false) String referrer,
 	             @RequestParam(required = false) String userAgent,
 	             @RequestParam(required = false) String destinationIPs,
-	             @RequestParam(required = false) Long blockID){
+	             @RequestParam(required = false) Long blockId){
 
 		if(id != null) {
-			if (id == 0) {
-				miLogRepository.create(ip, LocalDateTime.now(), size, (logtype != null)? logtype.name():null, remoteName, userId, httpMethod, httpStatus, resourceRequested, referrer, userAgent, destinationIPs, blockID);
-			} else {
-				miLogRepository.update(id, ip, LocalDateTime.now(), size, (logtype != null)? logtype.name():null, remoteName, userId, httpMethod, httpStatus, resourceRequested, referrer, userAgent, destinationIPs, blockID);
+			MiLog log = MiLog.builder()
+					.id((id != 0)? id : null)
+					.IP(ip)
+					.timestamp(LocalDateTime.now())
+					.size(size)
+					.logType(logtype)
+					.build();
+
+			if(logtype == LogType.ACCESS) {
+				AccessLogDetails details = AccessLogDetails.builder()
+						.id((id != 0) ? id : null)
+						.remoteName(remoteName)
+						.userID(userId)
+						.httpMethod(httpMethod)
+						.httpStatus(httpStatus)
+						.resourceRequested(resourceRequested)
+						.referrer(referrer)
+						.userAgent(userAgent)
+						.build();
+
+				details.setMiLog(log);
+				log.setAccessLogDetails(details);
 			}
+			else{
+				HdfsLogDetails details = HdfsLogDetails.builder()
+						.destinationIPs(destinationIPs)
+						.blockID(blockId)
+						.build();
+
+				log.setHdfsLogDetails(details);
+				details.setMiLog(log);
+			}
+
+			miLogRepository.save(log);
 		}
 
 		return "redirect:/logs/14";

@@ -1,9 +1,29 @@
 # MiLogDB
 #### _Michael Korres - Department of Informatics & Telecommunications - University of Athens_
 
+## Data Import
+Some numbers: (before DB normalization)
 
+| Batch Size | Time (s) | Time (min) |
+|------------|----------|-------------|
+| 1          | 3296.01  | ~54.93      |
+| 100        | 126.17   | ~2.10       |
+| 200        | 112.40   | ~1.87       |
+| 500        | 97.02    | ~1.62       |
+| 1000       | 94.21    | ~1.57       |
 
+- Persist per 10 batches in memory
+- Stayed with Batch Size = 1000 w/ around 2min on average (parsing & persisting)
 
+## Indexes
+- MiLog
+  - IP
+  - Timestamp
+- User
+  - Username
+
+The above domains are mainly used for the respective queries.
+Thus, indexes have been created based on them to speed things up.
 
 ## Security
 - Spring Security handles login (POST).

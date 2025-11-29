@@ -5,18 +5,21 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+import static com.mikorsoft.milogdb.config.Constants.BATCH_SIZE;
+
 @Getter
 @Setter
 @Entity
 @Builder
-@Table(name = "mi_logs")
+@Table(name = "mi_logs", indexes = {@Index(name = "idx_ip", columnList = "ip"),@Index(name = "idx_timestamp", columnList = "timestamp")})
 @NoArgsConstructor
 @AllArgsConstructor
 public class MiLog {
 
 	// common
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mi_logs_seq")
+	@SequenceGenerator(name = "mi_logs_seq", sequenceName = "mi_logs_seq", allocationSize = BATCH_SIZE)
 	private Long id;
 	private String IP;
 	private LocalDateTime timestamp;
@@ -24,19 +27,12 @@ public class MiLog {
 	@Enumerated(value = EnumType.STRING)
 	private LogType logType;
 
-	// TODO: bring "details" to different relation
-	// access
-	private String remoteName;
-	private String userID;
-	private String httpMethod;
-	private Integer httpStatus;
-	private String resourceRequested;
-	private String referrer;
-	private String userAgent;
+	@OneToOne(mappedBy = "miLog", cascade = CascadeType.ALL, orphanRemoval = true)
+	private AccessLogDetails accessLogDetails;
 
-	// HDFS_DataXceiver | HDFS_FS_Namesystem
-	private String destinationIPs;
-	private Long blockID;
+	@OneToOne(mappedBy = "miLog", cascade = CascadeType.ALL, orphanRemoval = true)
+	private HdfsLogDetails hdfsLogDetails;
+
 
 	@Override
 	public String toString() {
@@ -46,15 +42,6 @@ public class MiLog {
 				", timestamp=" + timestamp +
 				", size=" + size +
 				", logType=" + logType +
-				", remoteName=" + remoteName +
-				", userID=" + userID +
-				", httpMethod=" + httpMethod +
-				", httpStatus=" + httpStatus +
-				", resourceRequested=" + resourceRequested +
-				", referrer=" + referrer +
-				", userAgent=" + userAgent +
-				", destinationIPs=" + destinationIPs +
-				", blockID=" + blockID +
 				'}';
 	}
 }
