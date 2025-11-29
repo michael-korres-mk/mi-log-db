@@ -77,7 +77,7 @@ public interface MiLogRepository extends JpaRepository<MiLog, Long> {
 	@Query(nativeQuery = true, value = """
 		SELECT *
 		FROM mi_log_db.mi_logs l
-		WHERE l.size IS NOT NULL AND size < :size
+		WHERE l.logtype = 'ACCESS' AND l.size IS NOT NULL AND size < :size
 	""")
 	List<QueryDTO> query7(Long size);
 
