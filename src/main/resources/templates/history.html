@@ -35,6 +35,9 @@
                         </div>
                     </td>
 
+                    <td>
+                        <a th:text="'Run'" th:href="@{'/logs/' + ${row['queryId']} + '?' + ${row['filters']}}" style="margin-right: 10px;"></a>
+                    </td>
 
                 </tr>
                 </tbody>
