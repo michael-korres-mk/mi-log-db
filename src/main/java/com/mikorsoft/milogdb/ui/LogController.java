@@ -34,7 +34,7 @@ public class LogController {
 
 		queryUIComponents.put(1, new QueryUIComponent(1L, "1. Find the total logs per type that were created within a specified time range and sort them in a descending order.", List.of(MiLogColumn.LOG_TYPE, COUNT),MiLogFilter.timerange()));
 		queryUIComponents.put(2, new QueryUIComponent(2L, "2. Find the total logs per day for a specific action type and time range.", List.of(MiLogColumn.DAY, COUNT),Stream.concat(MiLogFilter.timerange().stream(),Stream.of(MiLogFilter.LOG_TYPE)).toList()));
-		queryUIComponents.put(3, new QueryUIComponent(3L, "3. Find the most common log per source IP for a specific day.", List.of(MiLogColumn.DAY, COUNT),List.of(MiLogFilter.DAY)));
+		queryUIComponents.put(3, new QueryUIComponent(3L, "3. Find the most common log per source IP for a specific day.", List.of(MiLogColumn.IP, COUNT),List.of(MiLogFilter.DAY)));
 		queryUIComponents.put(4, new QueryUIComponent(4L, "4. Find the top-5 Block IDs with regards to total number of actions per day for a specific date range (for types that Block ID is available)", List.of(BLOCK_ID, MiLogColumn.DAY, COUNT),MiLogFilter.timerange()));
 		queryUIComponents.put(5, new QueryUIComponent(5L, "5. Find the referrers (if any) that have led to more than one resources.", List.of(REFERRER, COUNT),MiLogFilter.none()));
 		queryUIComponents.put(6, new QueryUIComponent(6L, "6. Find the 2nd–most–common resource requested.", List.of(RESOURCE_REQUESTED, COUNT),MiLogFilter.none()));
