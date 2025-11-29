@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.mikorsoft.milogdb.config.Constants.BATCH_SIZE;
 import static com.mikorsoft.milogdb.domain.Regexes.IP_REGEX_RAW;
 
 @Service
@@ -29,7 +31,7 @@ public class DataImportServiceImpl implements DataImportService {
 	private final MiLogRepository miLogRepository;
 	private final EntityManager em;
 	@Transactional
-	public void importFile(LogFile log, String regex, Long n) throws IOException {
+	public void importFile(LogFile log, String regex) throws IOException {
 
 		File file = new ClassPathResource(log.getFilename()).getFile();
 		Pattern p = Pattern.compile(regex);
@@ -46,14 +48,14 @@ public class DataImportServiceImpl implements DataImportService {
 			String line;
 			List<MiLog> logs = new ArrayList<>();
 			int i = 1;
-			while ((n == null || n-- > 0) && (line = is.readLine()) != null) {
+			while ((line = is.readLine()) != null) {
 				Matcher m = p.matcher(line);
 				if (m.matches()) {
 					MiLog miLog = method.apply(m);
 					logs.add(miLog);
 				}
 
-				if(i % 1000 == 0){
+				if(i % (BATCH_SIZE * 10) == 0){
 					miLogRepository.saveAll(logs);
 					// help memory
 					em.flush();
@@ -77,8 +79,8 @@ public class DataImportServiceImpl implements DataImportService {
 		String remoteName = m.group(2);
 		String userID = m.group(3);
 		String t = m.group(4);
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss", Locale.ENGLISH);
-		LocalDateTime timestamp = LocalDateTime.parse(t, formatter);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MMM/yyyy:HH:mm:ss Z", Locale.ENGLISH);
+		LocalDateTime timestamp = OffsetDateTime.parse(t, formatter).toLocalDateTime();
 
 		String httpMethod = m.group(5);
 		String resourceRequested = m.group(6);

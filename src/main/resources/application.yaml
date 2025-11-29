@@ -15,7 +15,7 @@ spring:
             format_sql: false
             default_schema: mi_log_db
             dialect: org.hibernate.dialect.PostgreSQLDialect
-            jdbc.batch_size: 100
+            jdbc.batch_size: 1000
             order_inserts: true
             order_updates: true
             batch_versioned_data: true
@@ -23,4 +23,4 @@ spring:
         hibernate:
             naming.implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyHbmImpl
             naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-            ddl-auto: create-drop
+#            ddl-auto: create

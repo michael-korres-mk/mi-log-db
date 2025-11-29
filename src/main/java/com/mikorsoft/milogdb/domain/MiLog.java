@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+import static com.mikorsoft.milogdb.config.Constants.BATCH_SIZE;
+
 @Getter
 @Setter
 @Entity
@@ -17,7 +19,7 @@ public class MiLog {
 	// common
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mi_logs_seq")
-	@SequenceGenerator(name = "mi_logs_seq", sequenceName = "mi_logs_seq", allocationSize = 100)
+	@SequenceGenerator(name = "mi_logs_seq", sequenceName = "mi_logs_seq", allocationSize = BATCH_SIZE)
 	private Long id;
 	private String IP;
 	private LocalDateTime timestamp;

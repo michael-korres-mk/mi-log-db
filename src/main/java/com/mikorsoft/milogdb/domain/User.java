@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+import static com.mikorsoft.milogdb.config.Constants.BATCH_SIZE;
+
 @Getter
 @Setter
 @Entity
@@ -16,7 +18,7 @@ public class User implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")
-	@SequenceGenerator(name = "users_seq", sequenceName = "users_seq", allocationSize = 100)
+	@SequenceGenerator(name = "users_seq", sequenceName = "users_seq", allocationSize = BATCH_SIZE)
 	private Long id;
 	@Column(nullable = false, unique = true)
 	private String username;
