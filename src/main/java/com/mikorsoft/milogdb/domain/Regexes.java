@@ -67,7 +67,7 @@ public class Regexes {
 							BLOCK_ID_REGEX,
 							"(?:src:|to) /" + IP_REGEX
 					)) +
-					"(?:(?:dest: /" + IP_REGEX + ")? (?:of size " + SIZE_REGEX + ")?)?" +
+					"(?: dest: /" + IP_REGEX + "(?: of size " + SIZE_REGEX + ")?)?" +
 					END_ANCHOR
 			;
 
