@@ -13,7 +13,7 @@ import static com.mikorsoft.milogdb.config.Constants.BATCH_SIZE;
 @Getter
 @Setter
 @Entity
-@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(name = "username_unique",columnNames = "username"),indexes = {@Index(name = "idx_username", columnList = "username")})
 public class User implements UserDetails {
 
 	@Id

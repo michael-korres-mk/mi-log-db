@@ -15,6 +15,15 @@ Some numbers: (before DB normalization)
 - Persist per 10 batches in memory
 - Stayed with Batch Size = 1000 w/ around 2min on average (parsing & persisting)
 
+## Indexes
+- MiLog
+  - IP
+  - Timestamp
+- User
+  - Username
+
+The above domains are mainly used for the respective queries.
+Thus, indexes have been created based on them to speed things up.
 
 ## Security
 - Spring Security handles login (POST).

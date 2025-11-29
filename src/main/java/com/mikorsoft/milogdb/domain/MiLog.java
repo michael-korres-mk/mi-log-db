@@ -11,7 +11,7 @@ import static com.mikorsoft.milogdb.config.Constants.BATCH_SIZE;
 @Setter
 @Entity
 @Builder
-@Table(name = "mi_logs")
+@Table(name = "mi_logs", indexes = {@Index(name = "idx_ip", columnList = "ip"),@Index(name = "idx_timestamp", columnList = "timestamp")})
 @NoArgsConstructor
 @AllArgsConstructor
 public class MiLog {
